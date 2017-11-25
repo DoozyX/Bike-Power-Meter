@@ -12,4 +12,10 @@
     <string name="nav_about">About</string>
     <string name="home_stop">Stop</string>
     <string name="home_start">Start</string>
+    <string name="mesure_unit">Unit:</string>
+    <string name="unit_metric">Metric</string>
+    <string name="unit_imperial">Imperial</string>
+    <string name="your_weight">Your Weight:</string>
+    <string name="bike_weight">Bike Weight:</string>
+    <string name="continue_text">Continue</string>
 </resources>
