@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/BikePowerMeter/app.iml" filepath="$PROJECT_DIR$/BikePowerMeter/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/Project.iml" filepath="$PROJECT_DIR$/Project.iml" />
+      <module fileurl="file://$PROJECT_DIR$/BikePowerMeter.iml" filepath="$PROJECT_DIR$/BikePowerMeter.iml" />
+      <module fileurl="file://$PROJECT_DIR$/BikePowerMeterApp/BikePowerMeterApp.iml" filepath="$PROJECT_DIR$/BikePowerMeterApp/BikePowerMeterApp.iml" />
     </modules>
   </component>
 </project>
