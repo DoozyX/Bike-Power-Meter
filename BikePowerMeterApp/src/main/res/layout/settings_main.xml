@@ -1,15 +1,108 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:layout_editor_absoluteY="81dp">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/textViewSettingsUnit"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignTop="@id/radioGroupSettingsUnit"
+        android:layout_centerHorizontal="true"
+        android:layout_marginEnd="296dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/mesure_unit"
+        android:textSize="22sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.666"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <RadioGroup
+        android:id="@+id/radioGroupSettingsUnit"
+        android:layout_width="217dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewSettingsUnit"
+        android:layout_marginEnd="24dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.333"
+        app:layout_constraintStart_toEndOf="@+id/textViewSettingsUnit"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <RadioButton
+            android:id="@+id/rbSettingsMetric"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/unit_metric" />
+
+        <RadioButton
+            android:id="@+id/rbSettingsImperial"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/unit_imperial" />
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/textViewSettingsYourWeight"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="122dp"
-        android:layout_marginTop="96dp"
-        android:text="@string/nav_settings" />
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="32dp"
+        android:text="@string/your_weight"
+        android:textSize="22sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewSettingsUnit" />
 
-</RelativeLayout>
+    <EditText
+        android:id="@+id/editTextSettingsYourWeight"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:ems="10"
+        android:inputType="number"
+        android:labelFor="@id/editTextSettingsYourWeight"
+        android:textAlignment="center"
+        app:layout_constraintBaseline_toBaselineOf="@+id/textViewSettingsYourWeight"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textViewSettingsYourWeight" />
+
+    <TextView
+        android:id="@+id/textViewSettingsBikeWeight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="24dp"
+        android:text="@string/bike_weight"
+        android:textSize="22sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewSettingsYourWeight"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <EditText
+        android:id="@+id/editTextSettingsBikeWeight"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:ems="10"
+        android:inputType="number"
+        android:labelFor="@id/editTextSettingsBikeWeight"
+        android:textAlignment="center"
+        app:layout_constraintBaseline_toBaselineOf="@+id/textViewSettingsBikeWeight"
+        app:layout_constraintEnd_toEndOf="@+id/editTextSettingsYourWeight"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/textViewSettingsBikeWeight" />
+
+</android.support.constraint.ConstraintLayout>
