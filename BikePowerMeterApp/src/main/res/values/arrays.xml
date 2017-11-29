@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="tire_sizes">
-        <item>Mountain bike</item>
-        <item>Road/racing tires</item>
+        <item>@string/mountain_bike_tires</item>
+        <item>@string/road_racing_bike_tires</item>
     </string-array>
+    <string name="mountain_bike_tires">Mountain bike tires</string>
+    <string name="road_racing_bike_tires">Road/racing bike tires</string>
 </resources>
