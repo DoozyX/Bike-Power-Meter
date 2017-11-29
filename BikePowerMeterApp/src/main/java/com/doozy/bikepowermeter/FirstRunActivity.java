@@ -37,6 +37,8 @@ public class FirstRunActivity extends Activity {
         weight = findViewById(R.id.editTextFirstRunBikeWeight);
         editor.putString("bikeWeight", weight.getText().toString());
 
+        editor.putInt("bikeTires", 0);
+
         editor.apply();
 
         Intent intent = new Intent(this, MainActivity.class);

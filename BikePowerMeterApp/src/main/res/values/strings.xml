@@ -26,4 +26,5 @@
     <string name="start">Start</string>
     <string name="pause">Pause</string>
     <string name="stop">Stop</string>
+    <string name="bike_tire_size">Bike Tire Size:</string>
 </resources>

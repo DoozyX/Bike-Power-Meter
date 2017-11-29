@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="tire_sizes">
+        <item>Mountain bike</item>
+        <item>Road/racing tires</item>
+    </string-array>
+</resources>
