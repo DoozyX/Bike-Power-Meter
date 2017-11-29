@@ -1,32 +1,117 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:custom="http://schemas.android.com/apk/res-auto">
+
+    <com.github.lzyzsd.circleprogress.ArcProgress
+        android:id="@+id/arcPrgressPower"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_below="@+id/textViewHomePower"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        custom:arc_bottom_text="@string/power"
+        custom:arc_finished_color="@color/colorPrimary"
+        custom:arc_progress="8"
+        custom:arc_stroke_width="15dp"
+        custom:arc_suffix_text="watt"
+        custom:arc_suffix_text_padding="20dp"
+        custom:arc_text_color="@color/colorPrimary"
+        custom:arc_text_size="100sp"
+        custom:arc_unfinished_color="#767676" />
+
+    <TextView
+        android:id="@+id/textViewHomePower"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:text="@string/power"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/textViewHomeSpeedText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/arcPrgressPower"
+        android:layout_below="@+id/arcPrgressPower"
+        android:text="@string/speed"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/textViewHomeDurationText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/textViewHomeSpeedText"
+        android:layout_alignEnd="@+id/arcPrgressPower"
+        android:text="@string/duration"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/textViewHomeSpeed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/textViewHomeSpeedText"
+        android:layout_below="@+id/textViewHomeSpeedText"
+        android:layout_marginTop="12dp"
+        android:text="@string/_0_kmh"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/textViewHomeDuration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/textViewHomeSpeed"
+        android:layout_alignBottom="@+id/textViewHomeSpeed"
+        android:layout_alignStart="@+id/textViewHomeDurationText"
+        android:text="@string/_0_sec"
+        android:textSize="24sp" />
 
     <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
+        android:id="@+id/btnHomeStart"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="77dp"
-        android:text="@string/home_stop" />
+        android:onClick="btnHomeContinueOnClick"
+        android:text="@string/start" />
 
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/linearLayoutHomeBottomButtons"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_toEndOf="@+id/button"
-        android:text="@string/home_start" />
+        android:layout_alignParentStart="true"
+        android:gravity="bottom"
+        android:orientation="horizontal"
+        android:padding="6dp"
+        android:visibility="invisible"
+        android:weightSum="2"
+        style="?android:attr/buttonBarStyle">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/button"
-        android:layout_alignEnd="@+id/button2"
-        android:layout_marginBottom="50dp"
-        android:layout_marginEnd="52dp"
-        android:text="@string/nav_home" />
+        <Button
+            android:id="@+id/btnHomePauseContinue"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:onClick="btnHomePauseContinueOnClick"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:text="@string/pause"
+            style="?android:attr/buttonBarButtonStyle"/>
+
+        <Button
+            android:id="@+id/btnHomeStop"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:onClick="btnHomeStopOnClick"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:text="@string/stop"
+            style="?android:attr/buttonBarButtonStyle"/>
+
+    </LinearLayout>
 
 </RelativeLayout>

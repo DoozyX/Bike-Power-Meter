@@ -18,4 +18,12 @@
     <string name="your_weight">Your Weight:</string>
     <string name="bike_weight">Bike Weight:</string>
     <string name="continue_text">Continue</string>
+    <string name="power">Power</string>
+    <string name="speed">Speed:</string>
+    <string name="duration">Duration:</string>
+    <string name="_0_kmh">0 km/h</string>
+    <string name="_0_sec">0 sec</string>
+    <string name="start">Start</string>
+    <string name="pause">Pause</string>
+    <string name="stop">Stop</string>
 </resources>

@@ -17,6 +17,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.LinearLayout;
+
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -109,4 +113,30 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    public void btnHomeContinueOnClick(View view) {
+        LinearLayout linearLayout = findViewById(R.id.linearLayoutHomeBottomButtons);
+        linearLayout.setVisibility(View.VISIBLE);
+
+        view.setVisibility(View.INVISIBLE);
+    }
+
+    public void btnHomePauseContinueOnClick(View view) {
+        Button button = findViewById(R.id.btnHomePauseContinue);
+        if (button.getText().toString().equals(getResources().getString(R.string.continue_text))) {
+            button.setText(getResources().getString(R.string.pause));
+        } else {
+            button.setText(getResources().getString(R.string.continue_text));
+        }
+    }
+
+    public void btnHomeStopOnClick(View view) {
+        LinearLayout linearLayout = findViewById(R.id.linearLayoutHomeBottomButtons);
+        linearLayout.setVisibility(View.INVISIBLE);
+
+        Button button = findViewById(R.id.btnHomeStart);
+        button.setVisibility(View.VISIBLE);
+
+    }
+
 }
