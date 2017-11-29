@@ -5,12 +5,15 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 
@@ -29,9 +32,27 @@ public class SettingsFragment extends Fragment implements AdapterView.OnItemSele
         getActivity().setTitle(R.string.nav_settings);
 
         prefs = this.getActivity().getSharedPreferences("com.doozy.bikepowermeter", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        
 
         RadioGroup radioGroup = myView.findViewById(R.id.radioGroupSettingsUnit);
         String unit = prefs.getString("unit", "Unknown");
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                prefs = getActivity().getSharedPreferences("com.doozy.bikepowermeter", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = prefs.edit();
+
+                RadioButton selectedUnit;
+
+                RadioGroup radioGroup = myView.findViewById(R.id.radioGroupSettingsUnit);
+                int selectedUnitId = radioGroup.getCheckedRadioButtonId();
+                selectedUnit = myView.findViewById(selectedUnitId);
+                editor.putString("unit", selectedUnit.getText().toString());
+
+                editor.apply();
+            }
+
+        });
         if (unit.equals(getResources().getString(R.string.unit_metric))) {
             radioGroup.check(R.id.rbSettingsMetric);
         } else if (unit.equals(getResources().getString(R.string.unit_imperial))) {
@@ -48,6 +69,28 @@ public class SettingsFragment extends Fragment implements AdapterView.OnItemSele
             Log.e("BikeTiresSize", weight);
         }
 
+        editTextSettingsYourWeight.addTextChangedListener(new TextWatcher() {
+            SharedPreferences.Editor editor = prefs.edit();
+            private EditText weight;
+
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                weight = getActivity().findViewById(R.id.editTextSettingsYourWeight);
+                editor.putString("yourWeight", weight.getText().toString());
+                editor.apply();
+            }
+        });
+
         EditText editTextSettingsBikeWeight = myView.findViewById(R.id.editTextSettingsBikeWeight);
         weight = prefs.getString("bikeWeight", "Unknown");
         if (!weight.equals("Unknown")) {
@@ -55,6 +98,27 @@ public class SettingsFragment extends Fragment implements AdapterView.OnItemSele
         } else {
             Log.e("bikeWeight", weight);
         }
+        editTextSettingsBikeWeight.addTextChangedListener(new TextWatcher() {
+            SharedPreferences.Editor editor = prefs.edit();
+            private EditText weight;
+
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                weight = getActivity().findViewById(R.id.editTextSettingsBikeWeight);
+                editor.putString("bikeWeight", weight.getText().toString());
+                editor.apply();
+            }
+        });
 
 
         Spinner spinner = myView.findViewById(R.id.spinnerSettingsBikeTireSize);
@@ -69,6 +133,8 @@ public class SettingsFragment extends Fragment implements AdapterView.OnItemSele
             Log.e("bikeTires", bikeType);
         }
 
+        editor.apply();
+
         return myView;
     }
 
@@ -76,7 +142,6 @@ public class SettingsFragment extends Fragment implements AdapterView.OnItemSele
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         SharedPreferences.Editor editor = prefs.edit();
-        Log.e("adapterView.get", adapterView.getItemAtPosition(i).toString());
         editor.putString("bikeTires", adapterView.getItemAtPosition(i).toString());
         editor.apply();
     }
