@@ -5,7 +5,7 @@
     xmlns:custom="http://schemas.android.com/apk/res-auto">
 
     <com.github.lzyzsd.circleprogress.ArcProgress
-        android:id="@+id/arcPrgressPower"
+        android:id="@+id/arcPrgressHomePower"
         android:layout_width="300dp"
         android:layout_height="300dp"
         android:layout_below="@+id/textViewHomePower"
@@ -34,8 +34,8 @@
         android:id="@+id/textViewHomeSpeedText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/arcPrgressPower"
-        android:layout_below="@+id/arcPrgressPower"
+        android:layout_alignStart="@+id/arcPrgressHomePower"
+        android:layout_below="@+id/arcPrgressHomePower"
         android:text="@string/speed"
         android:textSize="30sp" />
 
@@ -44,7 +44,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/textViewHomeSpeedText"
-        android:layout_alignEnd="@+id/arcPrgressPower"
+        android:layout_alignEnd="@+id/arcPrgressHomePower"
         android:text="@string/duration"
         android:textSize="30sp" />
 
@@ -58,23 +58,13 @@
         android:text="@string/_0_kmh"
         android:textSize="24sp" />
 
-    <TextView
-        android:id="@+id/textViewHomeDuration"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/textViewHomeSpeed"
-        android:layout_alignBottom="@+id/textViewHomeSpeed"
-        android:layout_alignStart="@+id/textViewHomeDurationText"
-        android:text="@string/_0_sec"
-        android:textSize="24sp" />
-
     <Button
         android:id="@+id/btnHomeStart"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:onClick="btnHomeContinueOnClick"
+        android:onClick="btnHomeStartOnClick"
         android:text="@string/start" />
 
     <LinearLayout
@@ -87,8 +77,8 @@
         android:orientation="horizontal"
         android:padding="6dp"
         android:visibility="invisible"
-        android:weightSum="2"
-        style="?android:attr/buttonBarStyle">
+        android:weightSum="2">
+        <!--style="?android:attr/buttonBarStyle"-->
 
         <Button
             android:id="@+id/btnHomePauseContinue"
@@ -98,8 +88,8 @@
             android:onClick="btnHomePauseContinueOnClick"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
-            android:text="@string/pause"
-            style="?android:attr/buttonBarButtonStyle"/>
+            android:text="@string/pause"/>
+            <!--style="?android:attr/buttonBarButtonStyle"-->
 
         <Button
             android:id="@+id/btnHomeStop"
@@ -109,9 +99,17 @@
             android:onClick="btnHomeStopOnClick"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
-            android:text="@string/stop"
-            style="?android:attr/buttonBarButtonStyle"/>
+            android:text="@string/stop"/>
+            <!--style="?android:attr/buttonBarButtonStyle"-->
 
     </LinearLayout>
+
+    <Chronometer
+        android:id="@+id/chronometerHomeDuration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/textViewHomeDurationText"
+        android:layout_alignTop="@+id/textViewHomeSpeed"
+        android:textSize="24sp" />
 
 </RelativeLayout>

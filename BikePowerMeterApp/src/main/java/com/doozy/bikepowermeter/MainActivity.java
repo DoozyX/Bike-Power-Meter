@@ -4,6 +4,7 @@ import android.app.FragmentManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -18,6 +19,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.Chronometer;
 import android.widget.LinearLayout;
 
 import java.util.Objects;
@@ -27,6 +29,9 @@ public class MainActivity extends AppCompatActivity
 
     protected NavigationView navigationView;
     SharedPreferences prefs = null;
+
+    Chronometer chronometer;
+    long timeWhenStopped = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,19 +119,28 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    public void btnHomeContinueOnClick(View view) {
+    public void btnHomeStartOnClick(View view) {
         LinearLayout linearLayout = findViewById(R.id.linearLayoutHomeBottomButtons);
         linearLayout.setVisibility(View.VISIBLE);
 
         view.setVisibility(View.INVISIBLE);
+
+        chronometer = findViewById(R.id.chronometerHomeDuration);
+        chronometer.setBase(SystemClock.elapsedRealtime() + timeWhenStopped);
+        chronometer.start();
     }
 
     public void btnHomePauseContinueOnClick(View view) {
         Button button = findViewById(R.id.btnHomePauseContinue);
         if (button.getText().toString().equals(getResources().getString(R.string.continue_text))) {
             button.setText(getResources().getString(R.string.pause));
+            chronometer.setBase(SystemClock.elapsedRealtime() + timeWhenStopped);
+            chronometer.start();
+
         } else {
             button.setText(getResources().getString(R.string.continue_text));
+            timeWhenStopped = chronometer.getBase() - SystemClock.elapsedRealtime();
+            chronometer.stop();
         }
     }
 
@@ -137,6 +151,10 @@ public class MainActivity extends AppCompatActivity
         Button button = findViewById(R.id.btnHomeStart);
         button.setVisibility(View.VISIBLE);
 
+        chronometer.setBase(SystemClock.elapsedRealtime());
+        timeWhenStopped = 0;
+        chronometer.stop();
     }
+
 
 }
