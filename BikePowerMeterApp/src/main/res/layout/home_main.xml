@@ -5,7 +5,7 @@
     xmlns:custom="http://schemas.android.com/apk/res-auto">
 
     <com.github.lzyzsd.circleprogress.ArcProgress
-        android:id="@+id/arcPrgressHomePower"
+        android:id="@+id/arcProgressHomePower"
         android:layout_width="300dp"
         android:layout_height="300dp"
         android:layout_below="@+id/textViewHomePower"
@@ -13,10 +13,10 @@
         android:layout_marginTop="16dp"
         custom:arc_bottom_text="@string/power"
         custom:arc_finished_color="@color/colorPrimary"
-        custom:arc_progress="8"
+        custom:arc_progress="0"
         custom:arc_stroke_width="15dp"
         custom:arc_suffix_text="watt"
-        custom:arc_suffix_text_padding="20dp"
+        custom:arc_suffix_text_padding="40dp"
         custom:arc_text_color="@color/colorPrimary"
         custom:arc_text_size="100sp"
         custom:arc_unfinished_color="#767676" />
@@ -34,8 +34,8 @@
         android:id="@+id/textViewHomeSpeedText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/arcPrgressHomePower"
-        android:layout_below="@+id/arcPrgressHomePower"
+        android:layout_alignStart="@+id/arcProgressHomePower"
+        android:layout_below="@+id/arcProgressHomePower"
         android:text="@string/speed"
         android:textSize="30sp" />
 
@@ -44,7 +44,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/textViewHomeSpeedText"
-        android:layout_alignEnd="@+id/arcPrgressHomePower"
+        android:layout_alignEnd="@+id/arcProgressHomePower"
         android:text="@string/duration"
         android:textSize="30sp" />
 

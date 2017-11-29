@@ -5,10 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -22,7 +19,7 @@ import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.LinearLayout;
 
-import java.util.Objects;
+import com.github.lzyzsd.circleprogress.ArcProgress;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -32,6 +29,8 @@ public class MainActivity extends AppCompatActivity
 
     Chronometer chronometer;
     long timeWhenStopped = 0;
+
+    ArcProgress arcProgressHomePower;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,9 +124,20 @@ public class MainActivity extends AppCompatActivity
 
         view.setVisibility(View.INVISIBLE);
 
+        arcProgressHomePower = findViewById(R.id.arcProgressHomePower);
         chronometer = findViewById(R.id.chronometerHomeDuration);
+
         chronometer.setBase(SystemClock.elapsedRealtime() + timeWhenStopped);
         chronometer.start();
+
+        chronometer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
+
+            @Override
+            public void onChronometerTick(Chronometer chronometer) {
+                arcProgressHomePower.setProgress((int) (SystemClock.elapsedRealtime() - chronometer.getBase())/1000);
+            }
+
+        });
     }
 
     public void btnHomePauseContinueOnClick(View view) {
