@@ -3,7 +3,7 @@ package com.doozy.bikepowermeter;
 import java.util.Date;
 
 /**
- * Created by Kristina on 29.11.2017.
+ * Created by Kristina on 29.11.2017
  */
 
 public class Item {

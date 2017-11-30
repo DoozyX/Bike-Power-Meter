@@ -33,7 +33,6 @@ public class SettingsFragment extends Fragment implements AdapterView.OnItemSele
 
         prefs = this.getActivity().getSharedPreferences("com.doozy.bikepowermeter", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
-        
 
         RadioGroup radioGroup = myView.findViewById(R.id.radioGroupSettingsUnit);
         String unit = prefs.getString("unit", "Unknown");
