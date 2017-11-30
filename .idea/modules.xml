@@ -2,8 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/BikePowerMeter.iml" filepath="$PROJECT_DIR$/BikePowerMeter.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/BikePowerMeter.iml" filepath="$PROJECT_DIR$/.idea/BikePowerMeter.iml" />
+      <module fileurl="file://C:\Users\Kristina\AndroidStudioProjects\new\BikePowerMeter\BikePowerMeter.iml" filepath="C:\Users\Kristina\AndroidStudioProjects\new\BikePowerMeter\BikePowerMeter.iml" />
       <module fileurl="file://$PROJECT_DIR$/BikePowerMeterApp/BikePowerMeterApp.iml" filepath="$PROJECT_DIR$/BikePowerMeterApp/BikePowerMeterApp.iml" />
+      <module fileurl="file://C:\Users\Kristina\AndroidStudioProjects\new\BikePowerMeter\BikePowerMeterApp\BikePowerMeterApp.iml" filepath="C:\Users\Kristina\AndroidStudioProjects\new\BikePowerMeter\BikePowerMeterApp\BikePowerMeterApp.iml" />
     </modules>
   </component>
 </project>
