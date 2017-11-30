@@ -1,29 +1,27 @@
 package com.doozy.bikepowermeter;
 
-import java.util.Date;
-
 /**
  * Created by Kristina on 29.11.2017
  */
 
 public class Item {
-    protected Date date;
+    protected String date;
     protected String power;
     protected String speed;
     protected String duration;
 
-    public Item(Date date, String power, String speed, String duration) {
+    public Item(String date, String power, String speed, String duration) {
         this.date = date;
         this.power = power;
         this.speed = speed;
         this.duration = duration;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 

@@ -1,15 +1,18 @@
 package com.doozy.bikepowermeter;
 
 import android.app.Fragment;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -23,35 +26,42 @@ public class HistoryFragment extends Fragment {
     private ExpandableListView listView;
     private List<String> listDataHeader;
     private HashMap<String, List<String>> listHash;
+    private List<Item> tmpListItems;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        listDataHeader = new ArrayList<>();
-        listHash = new HashMap<>();
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("itemsInfoProba", Context.MODE_PRIVATE);
+        tmpListItems = new ArrayList<Item>();
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        String preferencesStr = sharedPreferences.getString("infoItems1","").toString();
+        if(preferencesStr!=""){
 
-//Tuka ke gi zema od shared preferences ke ima lista so itemi i vo foreach ke gi izminva
-        Date date=new Date();
-        Item item=new Item(date, "0:0:30","0:0:30","30");
-        Item item1=new Item(date, "0:0:20","0:0:20","30");
-        Item item2=new Item(date, "0:0:10","0:0:40","50");
-        listDataHeader.add(item.getDate().toString());
-        listDataHeader.add(item1.getDate().toString());
-        listDataHeader.add(item2.getDate().toString());
+            String[] parts = preferencesStr.split("!!");
+            for (String p:parts) {
+                Log.d("kristina", "haha "+p+" haha");
+                // Toast.makeText(getActivity(),p,Toast.LENGTH_LONG);
+            }
+
+            for (String p: parts) {
+                String[] parts1 = p.split("--");
+                Item i=new Item(parts1[0],"10 watts", parts1[1],parts1[2]);
+                tmpListItems.add(i);
+            }
+            Collections.reverse(tmpListItems);
+
+            listDataHeader = new ArrayList<>();
+            listHash = new HashMap<>();
 
 
-        List<String> lista = new ArrayList<>();
-        lista.add(item.toString());
+            for (Item i : tmpListItems) {
+                listDataHeader.add(i.getDate());
+                List<String> lista = new ArrayList<>();
+                lista.add(i.toString());
+                listHash.put(i.getDate(),lista);
+            }
 
-        List<String> lista1 = new ArrayList<>();
-        lista1.add(item1.toString());
-
-        List<String> lista2 = new ArrayList<>();
-        lista2.add(item2.toString());
-
-        listHash.put(listDataHeader.get(0),lista);
-        listHash.put(listDataHeader.get(1),lista1);
-        listHash.put(listDataHeader.get(2),lista2);
+        }
 
 
     }
@@ -67,10 +77,10 @@ public class HistoryFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-      //  lv = (ExpandableListView) view.findViewById(R.id.expListView);
+        getActivity().setTitle(R.string.nav_history);
+        //  lv = (ExpandableListView) view.findViewById(R.id.expListView);
         //lv.setAdapter(new ExpandableListAdapter(groups, children));
-       // lv.setGroupIndicator(null);
+        // lv.setGroupIndicator(null);
         listView = (ExpandableListView) view.findViewById(R.id.lvExp);
 //ova mozi da ne e vaka
         listAdapter = new ExpandableListAdapter(view.getContext(), listDataHeader, listHash);
