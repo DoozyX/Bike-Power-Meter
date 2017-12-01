@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
 
         prefs = getSharedPreferences("com.doozy.bikepowermeter", MODE_PRIVATE);
-
+        //prefs.edit().clear().apply();
         if (prefs.getBoolean("firstRun", true)) {
             Intent intent = new Intent(this, FirstRunActivity.class);
             startActivity(intent);
@@ -210,7 +210,7 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onChronometerTick(Chronometer chronometer) {
-                arcProgressHomePower.setProgress((int) (SystemClock.elapsedRealtime() - chronometer.getBase()) / 1000);
+                arcProgressHomePower.setProgress((int)Math.abs((Math.sin(((int) (SystemClock.elapsedRealtime() - chronometer.getBase()) / 1000))*13)));
             }
 
         });
