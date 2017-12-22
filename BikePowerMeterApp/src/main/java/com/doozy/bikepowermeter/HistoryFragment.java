@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 
+import com.doozy.bikepowermeter.data.Item;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;

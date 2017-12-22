@@ -24,7 +24,11 @@ import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.doozy.bikepowermeter.data.Exceptions.RequestNotReadyException;
+import com.doozy.bikepowermeter.services.WeatherService;
+import com.doozy.bikepowermeter.services.impl.OpenWeatherMapWeatherServiceImpl;
 import com.github.lzyzsd.circleprogress.ArcProgress;
 
 import java.util.Date;
@@ -40,7 +44,7 @@ public class MainActivity extends AppCompatActivity
 
     ArcProgress arcProgressHomePower;
 
-
+    WeatherService service;
     //from
     static final int REQUEST_LOCATION = 1;
     LocationManager locationManager;
@@ -52,6 +56,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        service = new OpenWeatherMapWeatherServiceImpl(this);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -86,57 +91,59 @@ public class MainActivity extends AppCompatActivity
         } else {
 
         }
+        service.updateWeather(42, 21);
+
         //getLocation();
 
 
     }
 
- /*   private void getLocation() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=
-                PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
-        } else {
-            Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+    /*   private void getLocation() {
+           if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=
+                   PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                   != PackageManager.PERMISSION_GRANTED) {
+               ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
+           } else {
+               Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 
-            if (location != null) {
-                double latti = location.getLatitude();
-                double longi = location.getLongitude();
-                Geocoder geocoder;
-                List<Address> addresses = null;
-                geocoder = new Geocoder(this, Locale.getDefault());
+               if (location != null) {
+                   double latti = location.getLatitude();
+                   double longi = location.getLongitude();
+                   Geocoder geocoder;
+                   List<Address> addresses = null;
+                   geocoder = new Geocoder(this, Locale.getDefault());
 
-                try {
-                    addresses = geocoder.getFromLocation(latti, longi, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                   try {
+                       addresses = geocoder.getFromLocation(latti, longi, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+                   } catch (IOException e) {
+                       e.printStackTrace();
+                   }
 
-                String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
-                String city = addresses.get(0).getLocality();
-                String state = addresses.get(0).getAdminArea();
-                String country = addresses.get(0).getCountryName();
-                String postalCode = addresses.get(0).getPostalCode();
-                String knownName = addresses.get(0).getFeatureName();
-                Log.d("primer", address + " " + city + " " + state + " " + country + " " + postalCode + " " + knownName + " hahaaha");
-                //   ((EditText)findViewById(R.id.editTextFirstRunYourWeight)).setText("Latitude "+ latti);
-                //   ((EditText)findViewById(R.id.textViewFirstRunBikeWeight)).setText("Longitude "+ latti);
-            }
-        }
-    }
+                   String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+                   String city = addresses.get(0).getLocality();
+                   String state = addresses.get(0).getAdminArea();
+                   String country = addresses.get(0).getCountryName();
+                   String postalCode = addresses.get(0).getPostalCode();
+                   String knownName = addresses.get(0).getFeatureName();
+                   Log.d("primer", address + " " + city + " " + state + " " + country + " " + postalCode + " " + knownName + " hahaaha");
+                   //   ((EditText)findViewById(R.id.editTextFirstRunYourWeight)).setText("Latitude "+ latti);
+                   //   ((EditText)findViewById(R.id.textViewFirstRunBikeWeight)).setText("Longitude "+ latti);
+               }
+           }
+       }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NotNull String[] permissions, @NonNull int[] grantResult) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResult);
+       @Override
+       public void onRequestPermissionsResult(int requestCode, @NotNull String[] permissions, @NonNull int[] grantResult) {
+           super.onRequestPermissionsResult(requestCode, permissions, grantResult);
 
-        switch (requestCode) {
-            case REQUEST_LOCATION:
-                getLocation();
-                break;
+           switch (requestCode) {
+               case REQUEST_LOCATION:
+                   getLocation();
+                   break;
 
-        }
-    }
-*/
+           }
+       }
+   */
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -210,13 +217,14 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onChronometerTick(Chronometer chronometer) {
-                arcProgressHomePower.setProgress((int)Math.abs((Math.sin(((int) (SystemClock.elapsedRealtime() - chronometer.getBase()) / 1000))*13)));
+                arcProgressHomePower.setProgress((int) Math.abs((Math.sin(((int) (SystemClock.elapsedRealtime() - chronometer.getBase()) / 1000)) * 13)));
             }
 
         });
+
     }
 
-    public void btnHomePauseContinueOnClick(View view) {
+    public void btnHomePauseContinueOnClick(View view) throws RequestNotReadyException{
         Button button = findViewById(R.id.btnHomePauseContinue);
         if (button.getText().toString().equals(getResources().getString(R.string.continue_text))) {
             button.setText(getResources().getString(R.string.pause));
@@ -228,28 +236,28 @@ public class MainActivity extends AppCompatActivity
             timeWhenStopped = chronometer.getBase() - SystemClock.elapsedRealtime();
             chronometer.stop();
         }
+
+        Toast.makeText(this, "Temperature is : " + service.getTemperature(), Toast.LENGTH_LONG).show();
     }
 
-    public void getTheInformations(View view){
-        SharedPreferences sharedPreferences = getSharedPreferences("itemsInfoProba",Context.MODE_PRIVATE);
+    public void getTheInformations(View view) {
+        SharedPreferences sharedPreferences = getSharedPreferences("itemsInfoProba", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         TextView tvSpeed = (TextView) findViewById(R.id.textViewHomeSpeed);
-        String speed= tvSpeed.getText().toString();
+        String speed = tvSpeed.getText().toString();
         Date date = new Date();
-        TextView tvDuration = (TextView)findViewById(R.id.chronometerHomeDuration);
+        TextView tvDuration = (TextView) findViewById(R.id.chronometerHomeDuration);
         String duration = tvDuration.getText().toString();
-        if(sharedPreferences.getString("infoItems1","")!=""){
-            String tmp = sharedPreferences.getString("infoItems1","");
-            tmp+=date+"--"+speed+"--"+duration+"!!";
-            editor.putString("infoItems1",tmp);
+        if (sharedPreferences.getString("infoItems1", "") != "") {
+            String tmp = sharedPreferences.getString("infoItems1", "");
+            tmp += date + "--" + speed + "--" + duration + "!!";
+            editor.putString("infoItems1", tmp);
             editor.apply();
-        }else{
-            editor.putString("infoItems1",date+"--"+speed+"--"+duration+"!!");
+        } else {
+            editor.putString("infoItems1", date + "--" + speed + "--" + duration + "!!");
             editor.apply();
         }
-
         //Toast.makeText(view.getContext(),sharedPreferences.getString("infoItems1","").toString(), Toast.LENGTH_LONG).show();
-
     }
 
     public void btnHomeStopOnClick(View view) {
@@ -259,8 +267,6 @@ public class MainActivity extends AppCompatActivity
         getTheInformations(view);
         Button button = findViewById(R.id.btnHomeStart);
         button.setVisibility(View.VISIBLE);
-
-
 
         chronometer.setBase(SystemClock.elapsedRealtime());
         timeWhenStopped = 0;
