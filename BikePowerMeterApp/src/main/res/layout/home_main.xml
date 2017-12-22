@@ -34,8 +34,8 @@
         android:id="@+id/textViewHomeSpeedText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/arcProgressHomePower"
-        android:layout_below="@+id/arcProgressHomePower"
+        android:layout_alignStart="@+id/radioGroup2"
+        android:layout_below="@+id/radioGroup2"
         android:text="@string/speed"
         android:textSize="30sp" />
 
@@ -116,8 +116,8 @@
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/textViewHomePower"
-        android:layout_below="@+id/chronometerHomeDuration"
+        android:layout_below="@+id/arcProgressHomePower"
+        android:layout_centerHorizontal="true"
         android:text="Positon"
         android:textSize="24sp" />
 
@@ -126,7 +126,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/textView3"
         android:layout_centerHorizontal="true"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:id="@+id/radioGroup2">
 
         <RadioButton
             android:id="@+id/radioButton7"
