@@ -1,4 +1,4 @@
-package com.doozy.bikepowermeter;
+package com.doozy.bikepowermeter.firstrun;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -8,6 +8,9 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+
+import com.doozy.bikepowermeter.MainActivity;
+import com.doozy.bikepowermeter.R;
 
 public class FirstRunActivity extends Activity {
 

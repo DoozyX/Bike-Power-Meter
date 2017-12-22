@@ -26,9 +26,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.doozy.bikepowermeter.about.AboutFragment;
 import com.doozy.bikepowermeter.data.Exceptions.RequestNotReadyException;
+import com.doozy.bikepowermeter.firstrun.FirstRunActivity;
 import com.doozy.bikepowermeter.services.WeatherService;
 import com.doozy.bikepowermeter.services.impl.OpenWeatherMapWeatherServiceImpl;
+import com.doozy.bikepowermeter.settings.SettingsFragment;
 import com.github.lzyzsd.circleprogress.ArcProgress;
 
 import java.util.Date;

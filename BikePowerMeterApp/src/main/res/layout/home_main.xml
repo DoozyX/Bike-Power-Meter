@@ -118,7 +118,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/arcProgressHomePower"
         android:layout_centerHorizontal="true"
-        android:text="Positon"
+        android:text="@string/positon"
         android:textSize="24sp" />
 
     <RadioGroup
