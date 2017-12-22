@@ -10,8 +10,6 @@ import com.doozy.bikepowermeter.RequestQueueSingleton;
 import com.doozy.bikepowermeter.data.Exceptions.RequestNotReadyException;
 import com.doozy.bikepowermeter.data.Weather;
 import com.doozy.bikepowermeter.services.WeatherService;
-
-import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -35,7 +33,7 @@ public class OpenWeatherMapWeatherServiceImpl implements WeatherService {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    weather = OpenWeatherMapWeatherServiceImpl.parseJason(response);
+                    weather = OpenWeatherMapWeatherServiceImpl.parseJason(response.getJSONObject("main"));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -75,15 +73,16 @@ public class OpenWeatherMapWeatherServiceImpl implements WeatherService {
         throw new RequestNotReadyException();
     }
 
-    public static  Weather parseJason(JSONObject JSONweather) throws RequestNotReadyException {
+    public static  Weather parseJason(JSONObject JSONWeather) throws RequestNotReadyException {
         Weather weather = new Weather();
         try {
-            weather.setTemperature(JSONweather.getDouble("temp"));
-            weather.setPressure(JSONweather.getDouble("pressure"));
-            weather.setHumidity(JSONweather.getDouble("humidity"));
+            weather.setTemperature(JSONWeather.getDouble("temp"));
+            weather.setPressure(JSONWeather.getDouble("pressure"));
+            weather.setHumidity(JSONWeather.getDouble("humidity"));
+            return weather;
         } catch (Exception e) {
             e.printStackTrace();
+            throw new RequestNotReadyException();
         }
-        throw new RequestNotReadyException();
     }
 }

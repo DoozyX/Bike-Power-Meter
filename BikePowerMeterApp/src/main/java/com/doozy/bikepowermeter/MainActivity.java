@@ -91,6 +91,7 @@ public class MainActivity extends AppCompatActivity
         } else {
 
         }
+
         service.updateWeather(42, 21);
 
         //getLocation();
