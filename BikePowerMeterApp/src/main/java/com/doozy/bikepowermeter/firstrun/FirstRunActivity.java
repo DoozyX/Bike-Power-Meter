@@ -9,7 +9,7 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
-import com.doozy.bikepowermeter.MainActivity;
+import com.doozy.bikepowermeter.home.MainActivity;
 import com.doozy.bikepowermeter.R;
 
 public class FirstRunActivity extends Activity {

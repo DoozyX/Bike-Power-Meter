@@ -6,7 +6,7 @@ import com.doozy.bikepowermeter.BaseView;
 /**
  * This specifies the contract between the view and the presenter.
  */
-public class SettingsContract {
+public interface SettingsContract {
 
     interface View extends BaseView<Presenter> {
         void showUnitMetric();
@@ -31,7 +31,6 @@ public class SettingsContract {
     }
 
     interface Presenter extends BasePresenter {
-
 
         void saveUnit(String unit);
 

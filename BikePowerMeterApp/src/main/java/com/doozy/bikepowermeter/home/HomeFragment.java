@@ -1,4 +1,4 @@
-package com.doozy.bikepowermeter;
+package com.doozy.bikepowermeter.home;
 
 import android.Manifest;
 import android.app.Fragment;
@@ -15,11 +15,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.doozy.bikepowermeter.R;
+
 /**
  * Created by doozy on 25-Nov-17
  */
 
-public class HomeFragment extends Fragment implements LocationListener {
+public class HomeFragment extends Fragment implements HomeContract.View, LocationListener {
     View myView;
    /* Date date= new Date();
     EditText powerET = (EditText)myView.findViewById(R.id.arcProgressHomePower);
@@ -37,6 +39,8 @@ public class HomeFragment extends Fragment implements LocationListener {
 
     static final int REQUEST_LOCATION = 1;
     LocationManager locationManager;
+    private HomeContract.Presenter mPresenter;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -54,9 +58,9 @@ public class HomeFragment extends Fragment implements LocationListener {
             this.onLocationChanged(null);
         }
 
-        // Set the Text to try this out
+        new HomePresenter(this);
 
-        return myView;
+        return myView;        
     }
 
     @Override
@@ -85,5 +89,11 @@ public class HomeFragment extends Fragment implements LocationListener {
     @Override
     public void onProviderDisabled(String s) {
 
+    }
+
+
+    @Override
+    public void setPresenter(HomeContract.Presenter presenter) {
+        mPresenter = presenter;
     }
 }

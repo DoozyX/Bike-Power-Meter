@@ -1,4 +1,4 @@
-package com.doozy.bikepowermeter;
+package com.doozy.bikepowermeter.history;
 
 import android.app.Fragment;
 import android.content.Context;
@@ -11,7 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 
+import com.doozy.bikepowermeter.R;
 import com.doozy.bikepowermeter.data.Item;
+import com.doozy.bikepowermeter.history.ExpandableListAdapter;
+import com.doozy.bikepowermeter.home.HomeContract;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,13 +25,14 @@ import java.util.List;
  * Created by doozy on 25-Nov-17
  */
 
-public class HistoryFragment extends Fragment {
+public class HistoryFragment extends Fragment implements HistoryContract.View  {
     View myView;
     private ExpandableListAdapter listAdapter;
     private ExpandableListView listView;
     private List<String> listDataHeader;
     private HashMap<String, List<String>> listHash;
     private List<Item> tmpListItems;
+    private HistoryContract.Presenter mPresenter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -65,7 +69,7 @@ public class HistoryFragment extends Fragment {
 
         }
 
-
+        new HistoryPresenter(this);
     }
 
     @Nullable
@@ -91,5 +95,10 @@ public class HistoryFragment extends Fragment {
     }
 
     private void initData() {
+    }
+
+    @Override
+    public void setPresenter(HistoryContract.Presenter presenter) {
+        mPresenter = presenter;
     }
 }

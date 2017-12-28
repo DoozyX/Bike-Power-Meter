@@ -1,4 +1,4 @@
-package com.doozy.bikepowermeter;
+package com.doozy.bikepowermeter.home;
 
 import android.Manifest;
 import android.app.FragmentManager;
@@ -26,9 +26,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.doozy.bikepowermeter.R;
 import com.doozy.bikepowermeter.about.AboutFragment;
 import com.doozy.bikepowermeter.data.Exceptions.RequestNotReadyException;
 import com.doozy.bikepowermeter.firstrun.FirstRunActivity;
+import com.doozy.bikepowermeter.history.HistoryFragment;
 import com.doozy.bikepowermeter.services.WeatherService;
 import com.doozy.bikepowermeter.services.impl.OpenWeatherMapWeatherServiceImpl;
 import com.doozy.bikepowermeter.settings.SettingsFragment;
