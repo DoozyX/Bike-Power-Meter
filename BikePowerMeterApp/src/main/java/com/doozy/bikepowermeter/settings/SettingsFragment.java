@@ -19,7 +19,7 @@ import android.widget.Spinner;
 import com.doozy.bikepowermeter.R;
 
 /**
- * Created by doozy on 25-Nov-17
+ * TODO: Description
  */
 
 public class SettingsFragment extends Fragment implements SettingsContract.View {

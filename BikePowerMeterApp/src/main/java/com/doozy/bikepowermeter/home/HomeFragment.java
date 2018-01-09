@@ -3,6 +3,7 @@ package com.doozy.bikepowermeter.home;
 import android.Manifest;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -13,12 +14,18 @@ import android.support.v4.app.ActivityCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Chronometer;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.doozy.bikepowermeter.R;
+import com.github.lzyzsd.circleprogress.ArcProgress;
 
 /**
- * Created by doozy on 25-Nov-17
+ * TODO: Description
  */
 
 public class HomeFragment extends Fragment implements HomeContract.View, LocationListener {
@@ -38,8 +45,23 @@ public class HomeFragment extends Fragment implements HomeContract.View, Locatio
    // String s= preferencesF.getString("items","").split("\n")[0].toLowerCase();
 
     static final int REQUEST_LOCATION = 1;
-    LocationManager locationManager;
+    //LocationManager locationManager;
     private HomeContract.Presenter mPresenter;
+
+    ArcProgress arcProgressHomePower;
+
+    Button btnStart;
+    Button btnPauseContinue;
+    Button btnStop;
+    LinearLayout layoutPauseStop;
+
+    RadioGroup rgPosition;
+    RadioButton rbRelaxed;
+    RadioButton rbAggressive;
+    RadioButton rbAerodynamic;
+
+    TextView tvSpeed;
+    Chronometer chmDuration;
 
     @Nullable
     @Override
@@ -58,14 +80,95 @@ public class HomeFragment extends Fragment implements HomeContract.View, Locatio
             this.onLocationChanged(null);
         }
 
-        new HomePresenter(this);
 
-        return myView;        
+        arcProgressHomePower = myView.findViewById(R.id.arcProgressHomePower);
+
+        rgPosition = myView.findViewById(R.id.radioGroupPositon);
+        rgPosition.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if (checkedId == rbRelaxed.getId()) {
+                    mPresenter.setPosition(HomeContract.Position.RELAXED);
+                } else if (checkedId == rbAggressive.getId()) {
+                    mPresenter.setPosition(HomeContract.Position.AGGRESSIVE);
+                } else {
+                    mPresenter.setPosition(HomeContract.Position.AERODYNAMIC);
+                }
+            }
+        });
+        rbRelaxed = myView.findViewById(R.id.rbRelaxed);
+        rbAggressive = myView.findViewById(R.id.rbAgressive);
+        rbAerodynamic = myView.findViewById(R.id.rbAerodynamic);
+
+        tvSpeed = myView.findViewById(R.id.textViewHomeSpeed);
+        chmDuration = myView.findViewById(R.id.chronometerHomeDuration);
+
+        btnStart = myView.findViewById(R.id.btnHomeStart);
+        btnStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPresenter.startRide();
+            }
+        });
+        btnPauseContinue = myView.findViewById(R.id.btnHomePauseContinue);
+        btnPauseContinue.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                mPresenter.pauseOrContinueRide();
+            }
+        });
+        btnStop = myView.findViewById(R.id.btnHomeStop);
+        btnStop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPresenter.stopRide();
+            }
+        });
+        layoutPauseStop = myView.findViewById(R.id.linearLayoutHomeBottomButtons);
+
+        SharedPreferences prefs = this.getActivity().getSharedPreferences("com.doozy.bikepowermeter", Context.MODE_PRIVATE);
+        new HomePresenter(this, prefs);
+
+        return myView;
     }
+
+    public void hideStartButton() {
+        btnStart.setVisibility(View.INVISIBLE);
+    }
+
+    public void showStartButton() {
+        btnStart.setVisibility(View.VISIBLE);
+    }
+
+    public void showPauseStopLayout() {
+        layoutPauseStop.setVisibility(View.VISIBLE);
+    }
+
+    public void hidePauseStopLayout() {
+        layoutPauseStop.setVisibility(View.INVISIBLE);
+    }
+
+    public void setArcPower(int power) {
+        arcProgressHomePower.setProgress(power);
+    }
+
+    public void setPauseButton() {
+        btnPauseContinue.setText(getResources().getString(R.string.continue_text));
+    }
+
+    public void setContinueButton() {
+        btnPauseContinue.setText(getResources().getString(R.string.pause));
+    }
+
+    public Chronometer getChmDuration() {
+        return chmDuration;
+    }
+
 
     @Override
     public void onLocationChanged(Location location) {
-        TextView t = (TextView) myView.findViewById(R.id.textViewHomeSpeed);
+        TextView t = myView.findViewById(R.id.textViewHomeSpeed);
         if(location==null){
 
             t.setText("0 m/s");
@@ -77,20 +180,19 @@ public class HomeFragment extends Fragment implements HomeContract.View, Locatio
     }
 
     @Override
-    public void onStatusChanged(String s, int i, Bundle bundle) {
+    public void onStatusChanged(String provider, int status, Bundle extras) {
 
     }
 
     @Override
-    public void onProviderEnabled(String s) {
+    public void onProviderEnabled(String provider) {
 
     }
 
     @Override
-    public void onProviderDisabled(String s) {
+    public void onProviderDisabled(String provider) {
 
     }
-
 
     @Override
     public void setPresenter(HomeContract.Presenter presenter) {

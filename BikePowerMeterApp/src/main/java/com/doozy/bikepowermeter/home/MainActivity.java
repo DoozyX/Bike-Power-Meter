@@ -8,7 +8,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -19,35 +18,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.Chronometer;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import com.doozy.bikepowermeter.R;
 import com.doozy.bikepowermeter.about.AboutFragment;
-import com.doozy.bikepowermeter.data.Exceptions.RequestNotReadyException;
 import com.doozy.bikepowermeter.firstrun.FirstRunActivity;
 import com.doozy.bikepowermeter.history.HistoryFragment;
 import com.doozy.bikepowermeter.services.WeatherService;
 import com.doozy.bikepowermeter.services.impl.OpenWeatherMapWeatherServiceImpl;
 import com.doozy.bikepowermeter.settings.SettingsFragment;
-import com.github.lzyzsd.circleprogress.ArcProgress;
-
-import java.util.Date;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     protected NavigationView navigationView;
     SharedPreferences prefs = null;
-
-    Chronometer chronometer;
-    long timeWhenStopped = 0;
-
-    ArcProgress arcProgressHomePower;
 
     WeatherService service;
     //from
@@ -206,77 +189,4 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
-    public void btnHomeStartOnClick(View view) {
-        LinearLayout linearLayout = findViewById(R.id.linearLayoutHomeBottomButtons);
-        linearLayout.setVisibility(View.VISIBLE);
-
-        view.setVisibility(View.INVISIBLE);
-
-        arcProgressHomePower = findViewById(R.id.arcProgressHomePower);
-        chronometer = findViewById(R.id.chronometerHomeDuration);
-
-        chronometer.setBase(SystemClock.elapsedRealtime() + timeWhenStopped);
-        chronometer.start();
-
-        chronometer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
-
-            @Override
-            public void onChronometerTick(Chronometer chronometer) {
-                arcProgressHomePower.setProgress((int) Math.abs((Math.sin(((int) (SystemClock.elapsedRealtime() - chronometer.getBase()) / 1000)) * 13)));
-            }
-
-        });
-
-    }
-
-    public void btnHomePauseContinueOnClick(View view) throws RequestNotReadyException{
-        Button button = findViewById(R.id.btnHomePauseContinue);
-        if (button.getText().toString().equals(getResources().getString(R.string.continue_text))) {
-            button.setText(getResources().getString(R.string.pause));
-            chronometer.setBase(SystemClock.elapsedRealtime() + timeWhenStopped);
-            chronometer.start();
-
-        } else {
-            button.setText(getResources().getString(R.string.continue_text));
-            timeWhenStopped = chronometer.getBase() - SystemClock.elapsedRealtime();
-            chronometer.stop();
-        }
-
-        Toast.makeText(this, "Temperature is : " + service.getTemperature(), Toast.LENGTH_LONG).show();
-    }
-
-    public void getTheInformations(View view) {
-        SharedPreferences sharedPreferences = getSharedPreferences("itemsInfoProba", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        TextView tvSpeed = (TextView) findViewById(R.id.textViewHomeSpeed);
-        String speed = tvSpeed.getText().toString();
-        Date date = new Date();
-        TextView tvDuration = (TextView) findViewById(R.id.chronometerHomeDuration);
-        String duration = tvDuration.getText().toString();
-        if (sharedPreferences.getString("infoItems1", "") != "") {
-            String tmp = sharedPreferences.getString("infoItems1", "");
-            tmp += date + "--" + speed + "--" + duration + "!!";
-            editor.putString("infoItems1", tmp);
-            editor.apply();
-        } else {
-            editor.putString("infoItems1", date + "--" + speed + "--" + duration + "!!");
-            editor.apply();
-        }
-        //Toast.makeText(view.getContext(),sharedPreferences.getString("infoItems1","").toString(), Toast.LENGTH_LONG).show();
-    }
-
-    public void btnHomeStopOnClick(View view) {
-        LinearLayout linearLayout = findViewById(R.id.linearLayoutHomeBottomButtons);
-        linearLayout.setVisibility(View.INVISIBLE);
-
-        getTheInformations(view);
-        Button button = findViewById(R.id.btnHomeStart);
-        button.setVisibility(View.VISIBLE);
-
-        chronometer.setBase(SystemClock.elapsedRealtime());
-        timeWhenStopped = 0;
-        chronometer.stop();
-    }
-
 }

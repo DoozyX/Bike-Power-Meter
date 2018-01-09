@@ -3,7 +3,7 @@ package com.doozy.bikepowermeter.history;
 import android.support.annotation.NonNull;
 
 /**
- * Created by doozy on 28-Dec-17
+ * TODO: Description
  */
 
 public class HistoryPresenter implements HistoryContract.Presenter {

@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 /**
- * Created by doozy on 22-Dec-17
+ *  TODO: Description
  */
 
 public class SettingsPresenter implements SettingsContract.Presenter {

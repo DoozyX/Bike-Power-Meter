@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * Created by doozy on 25-Nov-17
+ * TODO: Description
  */
 
 public class HistoryFragment extends Fragment implements HistoryContract.View  {
