@@ -42,7 +42,7 @@ public class HomeFragment extends Fragment implements HomeContract.View, Locatio
     //SharedPreferences preferencesF = this.getActivity().getSharedPreferences("MYPREFS", MODE_PRIVATE);
     //SharedPreferences.Editor editor = preferencesF.edit();
     //editor.putString(item.toString);
-   // String s= preferencesF.getString("items","").split("\n")[0].toLowerCase();
+    // String s= preferencesF.getString("items","").split("\n")[0].toLowerCase();
 
     static final int REQUEST_LOCATION = 1;
     //LocationManager locationManager;

@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -18,31 +20,49 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+
 import com.doozy.bikepowermeter.R;
 import com.doozy.bikepowermeter.about.AboutFragment;
+import com.doozy.bikepowermeter.data.MeasurementSP;
 import com.doozy.bikepowermeter.firstrun.FirstRunActivity;
 import com.doozy.bikepowermeter.history.HistoryFragment;
 import com.doozy.bikepowermeter.services.WeatherService;
 import com.doozy.bikepowermeter.services.impl.OpenWeatherMapWeatherServiceImpl;
 import com.doozy.bikepowermeter.settings.SettingsFragment;
 
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, LocationListener{
 
     protected NavigationView navigationView;
     SharedPreferences prefs = null;
-
     WeatherService service;
-    //from
+    public MeasurementSP m = new MeasurementSP();
+
+    public MeasurementSP getMeasurementSP() {
+        return m;
+    }
+
     static final int REQUEST_LOCATION = 1;
-    LocationManager locationManager;
-
-
-    //end
+    LocationManager lm;
+    int cnt=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
+        }
+        else{
+            Location location = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+            cnt++;
+        }
+
+        this.onLocationChanged(null);
 
         service = new OpenWeatherMapWeatherServiceImpl(this);
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -70,69 +90,13 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
 
-        //from here
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=
-                PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
-        } else {
-
-        }
 
         service.updateWeather(42, 21);
 
-        //getLocation();
 
 
     }
 
-    /*   private void getLocation() {
-           if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=
-                   PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
-                   != PackageManager.PERMISSION_GRANTED) {
-               ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
-           } else {
-               Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-
-               if (location != null) {
-                   double latti = location.getLatitude();
-                   double longi = location.getLongitude();
-                   Geocoder geocoder;
-                   List<Address> addresses = null;
-                   geocoder = new Geocoder(this, Locale.getDefault());
-
-                   try {
-                       addresses = geocoder.getFromLocation(latti, longi, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
-                   } catch (IOException e) {
-                       e.printStackTrace();
-                   }
-
-                   String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
-                   String city = addresses.get(0).getLocality();
-                   String state = addresses.get(0).getAdminArea();
-                   String country = addresses.get(0).getCountryName();
-                   String postalCode = addresses.get(0).getPostalCode();
-                   String knownName = addresses.get(0).getFeatureName();
-                   Log.d("primer", address + " " + city + " " + state + " " + country + " " + postalCode + " " + knownName + " hahaaha");
-                   //   ((EditText)findViewById(R.id.editTextFirstRunYourWeight)).setText("Latitude "+ latti);
-                   //   ((EditText)findViewById(R.id.textViewFirstRunBikeWeight)).setText("Longitude "+ latti);
-               }
-           }
-       }
-
-       @Override
-       public void onRequestPermissionsResult(int requestCode, @NotNull String[] permissions, @NonNull int[] grantResult) {
-           super.onRequestPermissionsResult(requestCode, permissions, grantResult);
-
-           switch (requestCode) {
-               case REQUEST_LOCATION:
-                   getLocation();
-                   break;
-
-           }
-       }
-   */
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -188,5 +152,36 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        double speed;
+        if(location == null){
+            speed = -1.0;
+
+        }else{
+            float nCurrentSpeed = location.getSpeed();
+            cnt++;
+            speed = nCurrentSpeed;
+        }
+        m.addSpeed(speed);
+        //tuka mislam i power da se dodava ovaj metod se izvrsuva na sekoja sekunda
+
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+
     }
 }

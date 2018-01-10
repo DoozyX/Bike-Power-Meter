@@ -94,6 +94,7 @@ public class HomePresenter implements HomeContract.Presenter {
     //TODO: Change
     public void getTheInformations() {
         SharedPreferences.Editor editor = mSharedPreferences.edit();
+        //Ovde sakam da go zemam measurement od MainActivity od nego da procitam average speed i power i ko ke gi zacuvam da go ispraznam
         Date date = new Date();
         String duration = String.valueOf(mChronometer.getBase());
         String speed = "10";
