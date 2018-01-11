@@ -25,6 +25,8 @@ public interface HomeContract {
 
         public void setArcPower(int power);
 
+        public void setArcSpeed(int speed);
+
         public void setPauseButton();
 
         public void setContinueButton();

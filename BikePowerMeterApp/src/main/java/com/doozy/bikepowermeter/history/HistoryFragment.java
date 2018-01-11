@@ -42,10 +42,6 @@ public class HistoryFragment extends Fragment implements HistoryContract.View  {
         if(preferencesStr!=""){
 
             String[] parts = preferencesStr.split("!!");
-            for (String p:parts) {
-                Log.d("kristina", "haha "+p+" haha");
-                // Toast.makeText(getActivity(),p,Toast.LENGTH_LONG);
-            }
 
             for (String p: parts) {
                 String[] parts1 = p.split("--");

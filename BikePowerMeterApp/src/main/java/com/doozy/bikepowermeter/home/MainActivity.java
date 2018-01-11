@@ -34,26 +34,35 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, LocationListener{
 
     protected NavigationView navigationView;
-    SharedPreferences prefs = null;
     WeatherService service;
-
-
     static final int REQUEST_LOCATION = 1;
     LocationManager lm;
     int cnt=0;
+    SharedPreferences prefs = null;
+    SharedPreferences.Editor editor;
+    String ride;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        prefs = getSharedPreferences("com.doozy.bikepowermeter", MODE_PRIVATE);
+        editor = prefs.edit();
+
         lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        ride=prefs.getString("thisRide","0");
+
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
         }
         else{
             Location location = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-            lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
-            cnt++;
+
+            if (prefs.getString(ride+"canWrite","0").equals("true")) {
+                lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+                cnt++;
+            }
         }
 
         this.onLocationChanged(null);
@@ -69,7 +78,6 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        prefs = getSharedPreferences("com.doozy.bikepowermeter", MODE_PRIVATE);
         //prefs.edit().clear().apply();
         if (prefs.getBoolean("firstRun", true)) {
             Intent intent = new Intent(this, FirstRunActivity.class);
@@ -148,16 +156,23 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onLocationChanged(Location location) {
+        //Updates everySecond, it's passing the current speed to the given ride
+
         double speed;
         if(location == null){
             speed = -1.0;
-
         }else{
             float nCurrentSpeed = location.getSpeed();
             cnt++;
             speed = nCurrentSpeed;
+            String tmp="";
+            if(!prefs.getString("thisRide","0").equals("0"))
+                tmp=prefs.getString("thisRide","0");
+            editor.remove("thisRide");
+            tmp+=" "+nCurrentSpeed;
+            editor.putString("thisRide",tmp);
+            editor.apply();
         }
-        //tuka mislam i power da se dodava ovaj metod se izvrsuva na sekoja sekunda
 
     }
 

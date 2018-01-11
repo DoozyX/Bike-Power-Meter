@@ -29,7 +29,7 @@ import com.github.lzyzsd.circleprogress.ArcProgress;
  * TODO: Description
  */
 
-public class HomeFragment extends Fragment implements HomeContract.View, LocationListener {
+public class HomeFragment extends Fragment implements HomeContract.View{
     View myView;
 
     static final int REQUEST_LOCATION = 1;
@@ -60,18 +60,6 @@ public class HomeFragment extends Fragment implements HomeContract.View, Locatio
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         myView = inflater.inflate(R.layout.home_main, container, false);
         getActivity().setTitle(R.string.nav_home);
-
-        LocationManager lm = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-
-        if(ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) !=
-                PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(),Manifest.permission.ACCESS_COARSE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
-        }else {
-            lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-            this.onLocationChanged(null);
-        }
-
 
         arcProgressHomePower = myView.findViewById(R.id.arcProgressHomePower);
 
@@ -145,6 +133,9 @@ public class HomeFragment extends Fragment implements HomeContract.View, Locatio
         arcProgressHomePower.setProgress(power);
     }
 
+    @Override
+    public void setArcSpeed(int speed) { tvSpeed.setText(speed); }
+
     public void setPauseButton() {
         btnPauseContinue.setText(getResources().getString(R.string.continue_text));
     }
@@ -155,35 +146,6 @@ public class HomeFragment extends Fragment implements HomeContract.View, Locatio
 
     public Chronometer getChmDuration() {
         return chmDuration;
-    }
-
-
-    @Override
-    public void onLocationChanged(Location location) {
-        TextView t = myView.findViewById(R.id.textViewHomeSpeed);
-        if(location==null){
-
-            t.setText("0 m/s");
-        }else{
-            float nCurrentSpeed = location.getSpeed();
-            t.setText(nCurrentSpeed +" m/s");
-        }
-
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-
     }
 
     @Override
