@@ -12,9 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 
 import com.doozy.bikepowermeter.R;
-import com.doozy.bikepowermeter.data.Item;
-import com.doozy.bikepowermeter.history.ExpandableListAdapter;
-import com.doozy.bikepowermeter.home.HomeContract;
+import com.doozy.bikepowermeter.data.Ride;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,14 +29,14 @@ public class HistoryFragment extends Fragment implements HistoryContract.View  {
     private ExpandableListView listView;
     private List<String> listDataHeader;
     private HashMap<String, List<String>> listHash;
-    private List<Item> tmpListItems;
+    private List<Ride> tmpListRides;
     private HistoryContract.Presenter mPresenter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("itemsInfoProba", Context.MODE_PRIVATE);
-        tmpListItems = new ArrayList<Item>();
+        tmpListRides = new ArrayList<Ride>();
         SharedPreferences.Editor editor = sharedPreferences.edit();
         String preferencesStr = sharedPreferences.getString("infoItems1","").toString();
         if(preferencesStr!=""){
@@ -51,20 +49,20 @@ public class HistoryFragment extends Fragment implements HistoryContract.View  {
 
             for (String p: parts) {
                 String[] parts1 = p.split("--");
-                Item i=new Item(parts1[0],"10 watts", parts1[1],parts1[2]);
-                tmpListItems.add(i);
+                Ride i=new Ride();
+                tmpListRides.add(i);
             }
-            Collections.reverse(tmpListItems);
+            Collections.reverse(tmpListRides);
 
             listDataHeader = new ArrayList<>();
             listHash = new HashMap<>();
 
 
-            for (Item i : tmpListItems) {
-                listDataHeader.add(i.getDate());
+            for (Ride i : tmpListRides) {
+                listDataHeader.add(i.getStartDate().toString());
                 List<String> lista = new ArrayList<>();
                 lista.add(i.toString());
-                listHash.put(i.getDate(),lista);
+                listHash.put(i.getStartDate().toString(),lista);
             }
 
         }

@@ -5,6 +5,11 @@ import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.widget.Chronometer;
 
+import com.doozy.bikepowermeter.data.AppDatabase;
+import com.doozy.bikepowermeter.data.Ride;
+import com.doozy.bikepowermeter.data.Weather;
+
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
 
@@ -15,14 +20,16 @@ import java.util.Objects;
 public class HomePresenter implements HomeContract.Presenter {
     private SharedPreferences mSharedPreferences;
     private HomeContract.View mHomeView;
+    private AppDatabase mDatabase;
 
     private Chronometer mChronometer;
     private long timeWhenStopped = 0;
     private HomeContract.Position mPosition;
-
+    private Ride mRide;
+    private Weather mWeather;
     private boolean paused = false;
 
-    public HomePresenter(@NonNull HomeContract.View homeView, SharedPreferences sharedPreferences) {
+    public HomePresenter(@NonNull HomeContract.View homeView, SharedPreferences sharedPreferences, AppDatabase database) {
         mSharedPreferences = sharedPreferences;
         mHomeView = homeView;
         mChronometer= mHomeView.getChmDuration();
@@ -32,6 +39,8 @@ public class HomePresenter implements HomeContract.Presenter {
                 chronometerTick();
             }
         });
+        mWeather = new Weather(); //TODO: Delete
+        mDatabase = database;
         mHomeView.setPresenter(this);
     }
 
@@ -60,6 +69,9 @@ public class HomePresenter implements HomeContract.Presenter {
 
         mChronometer.setBase(SystemClock.elapsedRealtime() + timeWhenStopped);
         mChronometer.start();
+
+        mRide = new Ride();
+        mRide.setStartDate(Calendar.getInstance().getTime());
     }
 
     @Override
@@ -83,30 +95,14 @@ public class HomePresenter implements HomeContract.Presenter {
         mHomeView.hidePauseStopLayout();
         mHomeView.showStartButton();
 
-        //TODO: Save Measurement
-        getTheInformations();
+//        mRide.calculateAndSetAverages(); TODO::Fix when no measurements
+        mRide.setEndDate(Calendar.getInstance().getTime());
+        mRide.setWeather(mWeather);
+
+        mDatabase.rideDao().insertRide(mRide);
 
         mChronometer.setBase(SystemClock.elapsedRealtime());
         timeWhenStopped = 0;
         mChronometer.stop();
-    }
-
-    //TODO: Change
-    public void getTheInformations() {
-        SharedPreferences.Editor editor = mSharedPreferences.edit();
-        //Ovde sakam da go zemam measurement od MainActivity od nego da procitam average speed i power i ko ke gi zacuvam da go ispraznam
-        Date date = new Date();
-        String duration = String.valueOf(mChronometer.getBase());
-        String speed = "10";
-        if (!Objects.equals(mSharedPreferences.getString("infoItems1", ""), "")) {
-            String tmp = mSharedPreferences.getString("infoItems1", "");
-            tmp += date + "--" + speed + "--" + duration + "!!";
-            editor.putString("infoItems1", tmp);
-            editor.apply();
-        } else {
-            editor.putString("infoItems1", date + "--" + speed + "--" + duration + "!!");
-            editor.apply();
-        }
-        //Toast.makeText(view.getContext(),sharedPreferences.getString("infoItems1","").toString(), Toast.LENGTH_LONG).show();
     }
 }

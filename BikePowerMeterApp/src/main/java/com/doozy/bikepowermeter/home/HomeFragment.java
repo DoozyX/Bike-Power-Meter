@@ -22,6 +22,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.doozy.bikepowermeter.R;
+import com.doozy.bikepowermeter.data.AppDatabase;
 import com.github.lzyzsd.circleprogress.ArcProgress;
 
 /**
@@ -30,22 +31,8 @@ import com.github.lzyzsd.circleprogress.ArcProgress;
 
 public class HomeFragment extends Fragment implements HomeContract.View, LocationListener {
     View myView;
-   /* Date date= new Date();
-    EditText powerET = (EditText)myView.findViewById(R.id.arcProgressHomePower);
-    String power = powerET.getText().toString();
-    TextView tvSpeed = (TextView) myView.findViewById(R.id.textViewHomeSpeed);
-    String speed= tvSpeed.getText().toString();
-    TextView tvDuration = (TextView) myView.findViewById(R.id.chronometerHomeDuration);
-    String duration = tvDuration.getText().toString();
-    Item item = new Item(date,power,speed,duration);
-*/
-    //SharedPreferences preferencesF = this.getActivity().getSharedPreferences("MYPREFS", MODE_PRIVATE);
-    //SharedPreferences.Editor editor = preferencesF.edit();
-    //editor.putString(item.toString);
-    // String s= preferencesF.getString("items","").split("\n")[0].toLowerCase();
 
     static final int REQUEST_LOCATION = 1;
-    //LocationManager locationManager;
     private HomeContract.Presenter mPresenter;
 
     ArcProgress arcProgressHomePower;
@@ -62,6 +49,11 @@ public class HomeFragment extends Fragment implements HomeContract.View, Locatio
 
     TextView tvSpeed;
     Chronometer chmDuration;
+
+    public static HomeFragment newInstance() {
+        return new HomeFragment();
+    }
+
 
     @Nullable
     @Override
@@ -128,7 +120,7 @@ public class HomeFragment extends Fragment implements HomeContract.View, Locatio
         layoutPauseStop = myView.findViewById(R.id.linearLayoutHomeBottomButtons);
 
         SharedPreferences prefs = this.getActivity().getSharedPreferences("com.doozy.bikepowermeter", Context.MODE_PRIVATE);
-        new HomePresenter(this, prefs);
+        new HomePresenter(this, prefs, AppDatabase.getAppDatabase(getActivity().getApplicationContext()));
 
         return myView;
     }

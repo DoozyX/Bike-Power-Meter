@@ -23,14 +23,12 @@ import android.view.MenuItem;
 
 import com.doozy.bikepowermeter.R;
 import com.doozy.bikepowermeter.about.AboutFragment;
-import com.doozy.bikepowermeter.data.MeasurementSP;
+import com.doozy.bikepowermeter.data.Measurement;
 import com.doozy.bikepowermeter.firstrun.FirstRunActivity;
 import com.doozy.bikepowermeter.history.HistoryFragment;
 import com.doozy.bikepowermeter.services.WeatherService;
 import com.doozy.bikepowermeter.services.impl.OpenWeatherMapWeatherServiceImpl;
 import com.doozy.bikepowermeter.settings.SettingsFragment;
-
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, LocationListener{
@@ -38,11 +36,7 @@ public class MainActivity extends AppCompatActivity
     protected NavigationView navigationView;
     SharedPreferences prefs = null;
     WeatherService service;
-    public MeasurementSP m = new MeasurementSP();
 
-    public MeasurementSP getMeasurementSP() {
-        return m;
-    }
 
     static final int REQUEST_LOCATION = 1;
     LocationManager lm;
@@ -92,8 +86,6 @@ public class MainActivity extends AppCompatActivity
 
 
         service.updateWeather(42, 21);
-
-
 
     }
 
@@ -165,7 +157,6 @@ public class MainActivity extends AppCompatActivity
             cnt++;
             speed = nCurrentSpeed;
         }
-        m.addSpeed(speed);
         //tuka mislam i power da se dodava ovaj metod se izvrsuva na sekoja sekunda
 
     }

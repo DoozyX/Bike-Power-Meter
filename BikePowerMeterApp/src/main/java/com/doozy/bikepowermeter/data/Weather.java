@@ -1,19 +1,62 @@
 package com.doozy.bikepowermeter.data;
 
-import io.reactivex.Observable;
-import io.reactivex.Observer;
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.NonNull;
 
 /**
- * Created by doozy on 20-Dec-17
+ * Immutable model class for a Weather.
  */
 
+@Entity(tableName = "weather")
 public class Weather {
+
+
+
+    @PrimaryKey(autoGenerate = true)
+    private long wid;
+
+    public long getWid() {
+        return wid;
+    }
+
+    public void setWid(long wid) {
+        this.wid = wid;
+    }
+
     private double temperature;
+
     private double humidity;
+
     private double pressure;
+
+    public void setDewPoint(double dewPoint) {
+        this.dewPoint = dewPoint;
+    }
+
+    public double getAirDensity() {
+        return airDensity;
+    }
+
+    public void setAirDensity(double airDensity) {
+        this.airDensity = airDensity;
+    }
+
     private double dewPoint;
+
     private double airDensity;
 
+
+    /**
+     * Use this constructor to create a new Weather object.
+     *
+     * @param temperature       title of the task
+     * @param humidity          description of the task
+     * @param pressure          pressure
+     */
+    @Ignore
     public Weather(double temperature, double humidity, double pressure) {
         this.temperature = temperature;
         this.humidity = humidity;
