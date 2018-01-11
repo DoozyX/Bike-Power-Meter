@@ -8,6 +8,9 @@ import com.doozy.bikepowermeter.BaseView;
  */
 public interface SettingsContract {
 
+    /**
+     * Specifies the functions that view need to implement
+     */
     interface View extends BaseView<Presenter> {
         void showUnitMetric();
 
@@ -30,6 +33,9 @@ public interface SettingsContract {
         boolean isBikeTireRoad(String bikeTireType);
     }
 
+    /**
+     * Specifies the functions that Presenter needs to implement
+     */
     interface Presenter extends BasePresenter {
 
         void saveUnit(String unit);
