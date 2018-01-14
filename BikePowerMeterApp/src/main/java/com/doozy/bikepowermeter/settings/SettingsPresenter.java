@@ -37,37 +37,37 @@ public class SettingsPresenter implements SettingsContract.Presenter {
     @Override
     public void start() {
         //Save Measurement Unit
-        String unit = getUnit();
+        int unit = getUnit();
         if (mSettingsView.isUnitMetric(unit)) {
             mSettingsView.showUnitMetric();
         } else if (mSettingsView.isUnitImperial(unit)){
             mSettingsView.showUnitImperial();
         } else {
-            Log.e("unit", unit);
+            Log.e("unit", unit + "");
         }
         //Save Your Weight
-        String weight = getYourWeight();
-        if (!weight.equals("Unknown")) {
-            mSettingsView.setYourWeight(weight);
+        int weight = getRiderWeight();
+        if (!(weight ==  -1)) {
+            mSettingsView.setRiderWeight(weight);
         } else {
-            Log.e("BikeTiresSize", weight);
+            Log.e("BikeTiresSize", weight + "");
         }
         //Save Bike Weight
         weight = getBikeWeight();
-        if (!weight.equals("Unknown")) {
+        if (!(weight ==  -1)){
             mSettingsView.setBikeWeight(weight);
         } else {
-            Log.e("bikeWeight", weight);
+            Log.e("bikeWeight", weight + "");
         }
 
         //Save Bike Tire type
-        String bikeTiresType = getBikeTireType();
+        int bikeTiresType = getBikeTireType();
         if (mSettingsView.isBikeTireMountain(bikeTiresType)) {
             mSettingsView.showBikeTireMountain();
         } else if (mSettingsView.isBikeTireRoad(bikeTiresType)) {
             mSettingsView.showBikeTireRoad();
         } else {
-            Log.e("bikeTires", bikeTiresType);
+            Log.e("bikeTires", bikeTiresType + "");
         }
     }
 
@@ -77,9 +77,9 @@ public class SettingsPresenter implements SettingsContract.Presenter {
      * @param key key for the data
      * @param value value of the data
      */
-    private void saveToSharedPreferences(String key, String value) {
+    private void saveToSharedPreferences(String key, int value) {
         SharedPreferences.Editor editor = mSharedPreferences.edit();
-        editor.putString(key, value);
+        editor.putInt(key, value);
         editor.apply();
     }
 
@@ -88,7 +88,7 @@ public class SettingsPresenter implements SettingsContract.Presenter {
      * @param unit unit to be updated
      */
     @Override
-    public void saveUnit(String unit) {
+    public void saveUnit(int unit) {
         saveToSharedPreferences("unit", unit);
     }
 
@@ -97,7 +97,7 @@ public class SettingsPresenter implements SettingsContract.Presenter {
      * @param weight weight to be updated
      */
     @Override
-    public void saveBikeWeight(String weight) {
+    public void saveBikeWeight(int weight) {
         saveToSharedPreferences("bikeWeight", weight);
     }
 
@@ -106,8 +106,8 @@ public class SettingsPresenter implements SettingsContract.Presenter {
      * @param weight weight to be updated
      */
     @Override
-    public void saveYourWeight(String weight) {
-        saveToSharedPreferences("yourWeight", weight);
+    public void saveRiderWeight(int weight) {
+        saveToSharedPreferences("riderWeight", weight);
     }
 
 
@@ -117,36 +117,36 @@ public class SettingsPresenter implements SettingsContract.Presenter {
      * @param bikeTireSize new bike tire type
      */
     @Override
-    public void setBikeTireSize(String bikeTireSize) {
+    public void setBikeTireSize(int bikeTireSize) {
         saveToSharedPreferences("bikeTires", bikeTireSize);
     }
 
     /**
      * @return Returns the unit from the data
      */
-    private String getUnit() {
-        return mSharedPreferences.getString("unit", "Unknown");
+    private int getUnit() {
+        return mSharedPreferences.getInt("unit", -1);
     }
 
     /**
      * @return Returns Your Weight from the data
      */
-    private String getYourWeight() {
-        return mSharedPreferences.getString("yourWeight", "Unknown");
+    private int getRiderWeight() {
+        return mSharedPreferences.getInt("riderWeight", -1);
     }
 
     /**
      * @return Returns Bike Tire Type from the data
      */
-    private String getBikeTireType() {
-        return mSharedPreferences.getString("bikeTires", "Unknown");
+    private int getBikeTireType() {
+        return mSharedPreferences.getInt("bikeTires", -1);
     }
 
     /**
      * @return Returns Bike Weight from the data
      */
-    private String getBikeWeight() {
-        return mSharedPreferences.getString("bikeWeight", "Unknown");
+    private int getBikeWeight() {
+        return mSharedPreferences.getInt("bikeWeight", -1);
     }
 
 }

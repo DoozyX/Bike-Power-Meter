@@ -43,7 +43,7 @@
         android:layout_marginEnd="296dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
-        android:text="@string/mesure_unit"
+        android:text="@string/measure_unit"
         android:textSize="22sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -71,7 +71,6 @@
             android:text="@string/unit_metric" />
 
         <RadioButton
-            android:id="@+id/rbFirstRunImperial"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -79,7 +78,7 @@
     </RadioGroup>
 
     <TextView
-        android:id="@+id/textViewFirstRunYourWeight"
+        android:id="@+id/textViewFirstRunRiderWeight"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -90,18 +89,18 @@
         app:layout_constraintTop_toBottomOf="@+id/textViewFirstRunUnit" />
 
     <EditText
-        android:id="@+id/editTextFirstRunYourWeight"
+        android:id="@+id/editTextFirstRunRiderWeight"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="24dp"
         android:ems="10"
         android:inputType="number"
-        android:labelFor="@id/editTextFirstRunYourWeight"
+        android:labelFor="@id/editTextFirstRunRiderWeight"
         android:textAlignment="center"
-        app:layout_constraintBaseline_toBaselineOf="@+id/textViewFirstRunYourWeight"
+        app:layout_constraintBaseline_toBaselineOf="@+id/textViewFirstRunRiderWeight"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textViewFirstRunYourWeight" />
+        app:layout_constraintStart_toEndOf="@+id/textViewFirstRunRiderWeight" />
 
     <TextView
         android:id="@+id/textViewFirstRunBikeWeight"
@@ -112,7 +111,7 @@
         android:text="@string/bike_weight"
         android:textSize="22sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewFirstRunYourWeight" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewFirstRunRiderWeight" />
 
     <EditText
         android:id="@+id/editTextFirstRunBikeWeight"
@@ -124,12 +123,11 @@
         android:labelFor="@id/editTextFirstRunBikeWeight"
         android:textAlignment="center"
         app:layout_constraintBaseline_toBaselineOf="@+id/textViewFirstRunBikeWeight"
-        app:layout_constraintEnd_toEndOf="@+id/editTextFirstRunYourWeight"
+        app:layout_constraintEnd_toEndOf="@+id/editTextFirstRunRiderWeight"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/textViewFirstRunBikeWeight" />
 
     <Button
-        android:id="@+id/btnFirstRunContinue"
         android:layout_width="376dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"

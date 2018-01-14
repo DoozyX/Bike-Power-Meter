@@ -12,10 +12,13 @@ import android.arch.persistence.room.PrimaryKey;
 public class Measurement {
     @PrimaryKey(autoGenerate = true)
     long id;
+
     private double speed;
     private double power;
 
-    public Measurement(){}
+    public Measurement() {
+    }
+
     @Ignore
     public Measurement(double speed, double power) {
         this.speed = speed;
@@ -37,5 +40,4 @@ public class Measurement {
     public void setPower(double powers) {
         this.power = powers;
     }
-
 }

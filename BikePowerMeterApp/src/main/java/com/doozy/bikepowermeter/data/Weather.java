@@ -1,10 +1,8 @@
 package com.doozy.bikepowermeter.data;
 
-import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
-import android.support.annotation.NonNull;
 
 /**
  * Immutable model class for a Weather.
@@ -18,7 +16,7 @@ public class Weather {
     @PrimaryKey(autoGenerate = true)
     private long wid;
 
-    public long getWid() {
+    long getWid() {
         return wid;
     }
 
@@ -36,7 +34,7 @@ public class Weather {
         this.dewPoint = dewPoint;
     }
 
-    public double getAirDensity() {
+    double getAirDensity() {
         return airDensity;
     }
 
@@ -61,6 +59,8 @@ public class Weather {
         this.temperature = temperature;
         this.humidity = humidity;
         this.pressure = pressure;
+        dewPoint = -1;
+        airDensity = -1;
     }
 
     public Weather() {
@@ -91,17 +91,23 @@ public class Weather {
     }
 
     public double getRho() {
-        calculateRho();
+        if (airDensity == -1) {
+            calculateRho();
+        }
         return airDensity;
     }
 
-    public double getDewPoint() {
-        calculateDewPoint();
+    double getDewPoint() {
+        if (dewPoint == -1) {
+            calculateDewPoint();
+        }
         return dewPoint;
     }
 
     public void calculateRho() {
-        calculateDewPoint();
+        if (dewPoint == -1) {
+            calculateDewPoint();
+        }
         // Step 1: calculate the saturation water pressure at the dew point,
         // i.e., the vapor pressure in the air.  Use Herman Wobus' equation.
         double c0 = 0.99999683;
@@ -115,22 +121,22 @@ public class Weather {
         double c8 = 0.11112018E-16;
         double c9 = -0.30994571E-19;
         double p = c0 + dewPoint*(c1 + dewPoint*(c2 + dewPoint*(c3 + dewPoint*(c4 + dewPoint*(c5 + dewPoint*(c6 + dewPoint*(c7 + dewPoint*(c8 + dewPoint*(c9)))))))));
-        double psat_mbar = 6.1078 / (Math.pow(p, 8));
+        double pSatMBar = 6.1078 / (Math.pow(p, 8));
 
         // Step 2: calculate the vapor pressure.
-        double pv_pascals = psat_mbar * 100.0;
+        double pvPascals = pSatMBar * 100.0;
 
         // Step 3: calculate the pressure of dry air, given the vapor
         // pressure and actual pressure.
-        double pd_pascals = (pressure*100) - pv_pascals;
+        double pdPascals = (pressure*100) - pvPascals;
 
         // Step 4: calculate the air density, using the equation for
         // the density of a mixture of dry air and water vapor.
-        airDensity = (pd_pascals / (287.0531 * (temperature + 273.15))) +
-                (pv_pascals / (461.4964 * (temperature + 273.15)));
+        airDensity = (pdPascals / (287.0531 * (temperature + 273.15))) +
+                (pvPascals / (461.4964 * (temperature + 273.15)));
     }
 
-    public void calculateDewPoint() {
+    private void calculateDewPoint() {
         dewPoint = temperature - ((100 - humidity) / 5);
     }
 

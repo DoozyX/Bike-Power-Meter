@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,7 +35,7 @@ public class HistoryFragment extends Fragment implements HistoryContract.View  {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("itemsInfoProba", Context.MODE_PRIVATE);
-        tmpListRides = new ArrayList<Ride>();
+        tmpListRides = new ArrayList<>();
         SharedPreferences.Editor editor = sharedPreferences.edit();
         String preferencesStr = sharedPreferences.getString("infoItems1","").toString();
         if(preferencesStr!=""){

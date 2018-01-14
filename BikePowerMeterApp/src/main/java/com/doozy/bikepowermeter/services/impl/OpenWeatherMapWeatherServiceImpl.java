@@ -13,12 +13,12 @@ import com.doozy.bikepowermeter.services.WeatherService;
 import org.json.JSONObject;
 
 /**
- * Created by doozy on 19-Dec-17
+ * TODO:Description
  */
 
 public class OpenWeatherMapWeatherServiceImpl implements WeatherService {
     private Context context;
-    private final String APPID = "1da5fe427b460e0ccab79aad59805209";
+    private static final String APPID = "1da5fe427b460e0ccab79aad59805209";
 
     public OpenWeatherMapWeatherServiceImpl(Context context) {
         this.context = context;
@@ -33,7 +33,7 @@ public class OpenWeatherMapWeatherServiceImpl implements WeatherService {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    weather = OpenWeatherMapWeatherServiceImpl.parseJason(response.getJSONObject("main"));
+                    weather = parseJason(response.getJSONObject("main"));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -73,12 +73,18 @@ public class OpenWeatherMapWeatherServiceImpl implements WeatherService {
         throw new RequestNotReadyException();
     }
 
-    public static  Weather parseJason(JSONObject JSONWeather) throws RequestNotReadyException {
+    @Override
+    public Weather getWeather() {
+        return weather;
+    }
+
+    private Weather parseJason(JSONObject JSONWeather) throws RequestNotReadyException {
         Weather weather = new Weather();
         try {
             weather.setTemperature(JSONWeather.getDouble("temp"));
             weather.setPressure(JSONWeather.getDouble("pressure"));
             weather.setHumidity(JSONWeather.getDouble("humidity"));
+            weather.calculateRho();
             return weather;
         } catch (Exception e) {
             e.printStackTrace();

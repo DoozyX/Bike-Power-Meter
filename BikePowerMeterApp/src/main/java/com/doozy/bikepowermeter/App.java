@@ -1,7 +1,6 @@
 package com.doozy.bikepowermeter;
 
 import android.app.Application;
-import android.arch.persistence.room.Room;
 
 import com.doozy.bikepowermeter.data.AppDatabase;
 

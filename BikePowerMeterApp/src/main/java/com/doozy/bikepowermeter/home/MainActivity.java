@@ -1,73 +1,60 @@
 package com.doozy.bikepowermeter.home;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.FragmentManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.doozy.bikepowermeter.R;
 import com.doozy.bikepowermeter.about.AboutFragment;
-import com.doozy.bikepowermeter.data.Measurement;
 import com.doozy.bikepowermeter.firstrun.FirstRunActivity;
 import com.doozy.bikepowermeter.history.HistoryFragment;
-import com.doozy.bikepowermeter.services.WeatherService;
-import com.doozy.bikepowermeter.services.impl.OpenWeatherMapWeatherServiceImpl;
 import com.doozy.bikepowermeter.settings.SettingsFragment;
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, LocationListener{
+public class MainActivity extends AppCompatActivity {
+    private static final String TAG = MainActivity.class.getSimpleName();
+
+    /**
+     * Code used in requesting runtime permissions.
+     */
+    private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
+
+    /**
+     * Constant used in the location settings dialog.
+     */
+    private static final int REQUEST_CHECK_SETTINGS = 0x1;
 
     protected NavigationView navigationView;
-    WeatherService service;
     static final int REQUEST_LOCATION = 1;
-    LocationManager lm;
-    int cnt=0;
-    SharedPreferences prefs = null;
-    SharedPreferences.Editor editor;
-    String ride;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        prefs = getSharedPreferences("com.doozy.bikepowermeter", MODE_PRIVATE);
-        editor = prefs.edit();
-
-        lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        ride=prefs.getString("thisRide","0");
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
-        }
-        else{
-            Location location = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-
-            if (prefs.getString(ride+"canWrite","0").equals("true")) {
-                lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
-                cnt++;
-            }
+        SharedPreferences prefs = getSharedPreferences("com.doozy.bikepowermeter", MODE_PRIVATE);
+        while (!checkPermissions()) {
+            requestPermissions();
         }
 
-        this.onLocationChanged(null);
-
-        service = new OpenWeatherMapWeatherServiceImpl(this);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -89,11 +76,30 @@ public class MainActivity extends AppCompatActivity
 
 
         navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                // Handle navigation view item clicks here.
+                int id = item.getItemId();
+                FragmentManager fragmentManager = getFragmentManager();
 
+                if (id == R.id.nav_home) {
+                    // Handle the camera action
+                    fragmentManager.beginTransaction().replace(R.id.content_main, new HomeFragment()).commit();
+                } else if (id == R.id.nav_history) {
+                    fragmentManager.beginTransaction().replace(R.id.content_main, new HistoryFragment()).commit();
+                } else if (id == R.id.nav_settings) {
+                    fragmentManager.beginTransaction().replace(R.id.content_main, new SettingsFragment()).commit();
+                } else if (id == R.id.nav_about) {
+                    fragmentManager.beginTransaction().replace(R.id.content_main, new AboutFragment()).commit();
+                }
 
+                DrawerLayout drawer = findViewById(R.id.drawer_layout);
+                drawer.closeDrawer(GravityCompat.START);
+                return true;
+            }
+        });
 
-        service.updateWeather(42, 21);
 
     }
 
@@ -133,61 +139,110 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-        FragmentManager fragmentManager = getFragmentManager();
-
-        if (id == R.id.nav_home) {
-            // Handle the camera action
-            fragmentManager.beginTransaction().replace(R.id.content_main, new HomeFragment()).commit();
-        } else if (id == R.id.nav_history) {
-            fragmentManager.beginTransaction().replace(R.id.content_main, new HistoryFragment()).commit();
-        } else if (id == R.id.nav_settings) {
-            fragmentManager.beginTransaction().replace(R.id.content_main, new SettingsFragment()).commit();
-        } else if (id == R.id.nav_about) {
-            fragmentManager.beginTransaction().replace(R.id.content_main, new AboutFragment()).commit();
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            // Check for the integer request code originally supplied to startResolutionForResult().
+            case REQUEST_CHECK_SETTINGS:
+                switch (resultCode) {
+                    case Activity.RESULT_OK:
+                        Log.i(TAG, "User agreed to make required location settings changes.");
+                        break;
+                    case Activity.RESULT_CANCELED:
+                        Log.i(TAG, "User chose not to make required location settings changes.");
+                        break;
+                }
+                break;
         }
-
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
     }
 
-    @Override
-    public void onLocationChanged(Location location) {
-        //Updates everySecond, it's passing the current speed to the given ride
+    /**
+     * Shows a {@link Snackbar}.
+     *
+     * @param mainTextStringId The id for the string resource for the Snackbar text.
+     * @param actionStringId   The text of the action item.
+     * @param listener         The listener associated with the Snackbar action.
+     */
+    private void showSnackbar(final int mainTextStringId, final int actionStringId,
+                              View.OnClickListener listener) {
+        Snackbar.make(
+                findViewById(android.R.id.content),
+                getString(mainTextStringId),
+                Snackbar.LENGTH_INDEFINITE)
+                .setAction(getString(actionStringId), listener).show();
+    }
 
-        double speed;
-        if(location == null){
-            speed = -1.0;
-        }else{
-            float nCurrentSpeed = location.getSpeed();
-            cnt++;
-            speed = nCurrentSpeed;
-            String tmp="";
-            if(!prefs.getString("thisRide","0").equals("0"))
-                tmp=prefs.getString("thisRide","0");
-            editor.remove("thisRide");
-            tmp+=" "+nCurrentSpeed;
-            editor.putString("thisRide",tmp);
-            editor.apply();
+    /**
+     * Return the current state of the permissions needed.
+     */
+    private boolean checkPermissions() {
+        int permissionState = ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION);
+        return permissionState == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private void requestPermissions() {
+        boolean shouldProvideRationale =
+                ActivityCompat.shouldShowRequestPermissionRationale(this,
+                        Manifest.permission.ACCESS_FINE_LOCATION);
+
+        // Provide an additional rationale to the user. This would happen if the user denied the
+        // request previously, but didn't check the "Don't ask again" checkbox.
+        if (shouldProvideRationale) {
+            Log.i(TAG, "Displaying permission rationale to provide additional context.");
+            showSnackbar(R.string.permission_rationale,
+                    android.R.string.ok, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            // Request permission
+                            ActivityCompat.requestPermissions(MainActivity.this,
+                                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                    REQUEST_PERMISSIONS_REQUEST_CODE);
+                        }
+                    });
+        } else {
+            Log.i(TAG, "Requesting permission");
+            // Request permission. It's possible this can be auto answered if device policy
+            // sets the permission in a given state or the user denied the permission
+            // previously and checked "Never ask again".
+            ActivityCompat.requestPermissions(MainActivity.this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    REQUEST_PERMISSIONS_REQUEST_CODE);
         }
-
     }
 
+    /**
+     * Callback received when a permissions request has been completed.
+     */
     @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        Log.i(TAG, "onRequestPermissionResult");
+        if (requestCode == REQUEST_PERMISSIONS_REQUEST_CODE) {
+            if (grantResults.length <= 0) {
+                // If user interaction was interrupted, the permission request is cancelled and you
+                // receive empty arrays.
+                Log.i(TAG, "User interaction was cancelled.");
+            }else {
+                // Permission denied.
 
+                // Notify the user via a SnackBar that they have rejected a core permission for the
+                // app, which makes the Activity useless. In a real app, core permissions would
+                // typically be best requested during a welcome-screen flow.
+
+                // Additionally, it is important to remember that a permission might have been
+                // rejected without asking the user for permission (device policy or "Never ask
+                // again" prompts). Therefore, a user interface affordance is typically implemented
+                // when permissions are denied. Otherwise, your app could appear unresponsive to
+                // touches or interactions which have required permissions.
+                showSnackbar(R.string.permission_denied_explanation,
+                        R.string.settings, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                requestPermissions();
+                            }
+                        });
+            }
+        }
     }
 
-    @Override
-    public void onProviderEnabled(String provider) {
-
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-
-    }
 }

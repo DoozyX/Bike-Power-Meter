@@ -16,21 +16,21 @@ public interface SettingsContract {
 
         void showUnitImperial();
 
-        void setYourWeight(String weight);
+        void setRiderWeight(int weight);
 
-        void setBikeWeight(String weight);
+        void setBikeWeight(int weight);
 
         void showBikeTireMountain();
 
         void showBikeTireRoad();
 
-        boolean isUnitMetric(String unit);
+        boolean isUnitMetric(int unit);
 
-        boolean isUnitImperial(String unit);
+        boolean isUnitImperial(int unit);
 
-        boolean isBikeTireMountain(String bikeTireType);
+        boolean isBikeTireMountain(int bikeTireType);
 
-        boolean isBikeTireRoad(String bikeTireType);
+        boolean isBikeTireRoad(int bikeTireType);
     }
 
     /**
@@ -38,12 +38,12 @@ public interface SettingsContract {
      */
     interface Presenter extends BasePresenter {
 
-        void saveUnit(String unit);
+        void saveUnit(int unit);
 
-        void saveBikeWeight(String weight);
+        void saveBikeWeight(int weight);
 
-        void saveYourWeight(String weight);
+        void saveRiderWeight(int weight);
 
-        void setBikeTireSize(String bikeTireSize);
+        void setBikeTireSize(int bikeTireSize);
     }
 }

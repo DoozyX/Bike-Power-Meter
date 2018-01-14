@@ -6,17 +6,12 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
-import com.doozy.bikepowermeter.home.MainActivity;
 import com.doozy.bikepowermeter.R;
+import com.doozy.bikepowermeter.home.MainActivity;
 
 public class FirstRunActivity extends Activity {
-
-    private RadioGroup radioGroupUnit;
-    private RadioButton selectedUnit;
-    private EditText weight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,18 +24,21 @@ public class FirstRunActivity extends Activity {
         SharedPreferences.Editor editor = prefs.edit();
         editor.putBoolean("firstRun", false);
 
-        radioGroupUnit = findViewById(R.id.radioGroupFirstRunUnit);
+        RadioGroup radioGroupUnit = findViewById(R.id.radioGroupFirstRunUnit);
         int selectedUnitId = radioGroupUnit.getCheckedRadioButtonId();
-        selectedUnit = findViewById(selectedUnitId);
-        editor.putString("unit", selectedUnit.getText().toString());
+        if (selectedUnitId == R.id.rbFirstRunMetric)  {
+            editor.putInt("unit", 0);
+        } else {
+            editor.putInt("unit", 1);
+        }
 
-        weight = findViewById(R.id.editTextFirstRunYourWeight);
-        editor.putString("yourWeight", weight.getText().toString());
+        EditText weight = findViewById(R.id.editTextFirstRunRiderWeight);
+        editor.putInt("riderWeight", Integer.parseInt(weight.getText().toString()));
 
         weight = findViewById(R.id.editTextFirstRunBikeWeight);
-        editor.putString("bikeWeight", weight.getText().toString());
+        editor.putInt("bikeWeight", Integer.parseInt(weight.getText().toString()));
 
-        editor.putString("bikeTires", getResources().getString(R.string.mountain_bike_tires));
+        editor.putInt("bikeTires", 0);
 
         editor.apply();
 

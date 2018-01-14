@@ -19,10 +19,63 @@ public class Ride {
     private long id;
 
     @Embedded
-    private Date startDate;
+    private Date mStartDate;
     @Embedded
-    private Date endDate;
-    private int duration;
+    private Date mEndDate;
+    private int mDuration;
+
+    private int mAveragePower;
+    private int mAverageSpeed;
+
+    @Ignore
+    private List<Measurement> mMeasurements;
+
+    @Embedded
+    private Weather mWeather;
+
+    public Ride() {
+        mMeasurements = new ArrayList<>();
+    }
+
+    public Date getStartDate() {
+        return mStartDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.mStartDate = startDate;
+    }
+
+    public Date getEndDate() {
+        return mEndDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.mEndDate = endDate;
+    }
+
+    public int getDuration() {
+        return mDuration;
+    }
+
+    public void setDuration(int duration) {
+        this.mDuration = duration;
+    }
+
+    public int getAveragePower() {
+        return mAveragePower;
+    }
+
+    public int getAverageSpeed() {
+        return mAverageSpeed;
+    }
+
+    public Weather getWeather() {
+        return mWeather;
+    }
+
+    public void setWeather(Weather weather) {
+        this.mWeather = weather;
+    }
 
     public long getId() {
         return id;
@@ -33,77 +86,25 @@ public class Ride {
     }
 
     public void setAveragePower(int averagePower) {
-        this.averagePower = averagePower;
+        this.mAveragePower = averagePower;
     }
 
     public void setAverageSpeed(int averageSpeed) {
-        this.averageSpeed = averageSpeed;
+        this.mAverageSpeed = averageSpeed;
     }
 
-    private int averagePower;
-    private int averageSpeed;
-
-    @Ignore //TODO::Change
-    private List<Measurement> measurements;
-
-    @Embedded
-    private Weather weather;
-
-    public Ride() {
-        measurements = new ArrayList<>();
-    }
-
-    public Date getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
-    }
-
-    public Date getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
-    }
-
-    public int getDuration() {
-        return duration;
-    }
-
-    public void setDuration(int duration) {
-        this.duration = duration;
-    }
-
-    public int getAveragePower() {
-        return averagePower;
-    }
-
-    public int getAverageSpeed() {
-        return averageSpeed;
-    }
-
-    public Weather getWeather() {
-        return weather;
-    }
-
-    public void setWeather(Weather weather) {
-        this.weather = weather;
-    }
 
     public void addMeasurement(Measurement measurement) {
-        measurements.add(measurement);
+        mMeasurements.add(measurement);
     }
 
     public void calculateAndSetAverages() {
-        int sumPower = 0, sumSpeed = 0, n = measurements.size();
-        for (Measurement m: measurements) {
+        int sumPower = 0, sumSpeed = 0, n = mMeasurements.size();
+        for (Measurement m: mMeasurements) {
             sumPower += m.getPower();
             sumSpeed += m.getSpeed();
         }
-        averagePower = sumPower / n;
-        averageSpeed = sumSpeed / n;
+        mAveragePower = sumPower / n;
+        mAverageSpeed = sumSpeed / n;
     }
 }

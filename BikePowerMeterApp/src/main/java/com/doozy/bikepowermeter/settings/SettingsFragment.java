@@ -12,11 +12,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 
 import com.doozy.bikepowermeter.R;
+
+import java.util.Locale;
 
 
 /**
@@ -35,7 +36,7 @@ public class SettingsFragment extends Fragment implements SettingsContract.View 
      */
     private RadioGroup unitRadioGroup;
 
-    private EditText editTextSettingsYourWeight;
+    private EditText editTextSettingsRiderWeight;
 
     private EditText editTextSettingsBikeWeight;
 
@@ -51,15 +52,11 @@ public class SettingsFragment extends Fragment implements SettingsContract.View 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        getActivity().setTitle(R.string.nav_settings);
-
-        SharedPreferences prefs = this.getActivity().getSharedPreferences("com.doozy.bikepowermeter", Context.MODE_PRIVATE);
-
-        new SettingsPresenter(this, prefs);
+        getActivity().setTitle(R.string.settings);
     }
 
     /**
-     * Andorid method called on creating of the view
+     * Android method called on creating of the view
      *
      * @param inflater inflater
      * @param container container
@@ -76,16 +73,17 @@ public class SettingsFragment extends Fragment implements SettingsContract.View 
 
         unitRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                int selectedUnitId = unitRadioGroup.getCheckedRadioButtonId();
-                RadioButton selectedUnit = myView.findViewById(selectedUnitId);
-
-                mPresenter.saveUnit(selectedUnit.getText().toString());
+                if (checkedId == R.id.rbSettingsMetric) {
+                    mPresenter.saveUnit(0);
+                } else {
+                    mPresenter.saveUnit(1);
+                }
             }
         });
 
-        editTextSettingsYourWeight = myView.findViewById(R.id.editTextSettingsYourWeight);
+        editTextSettingsRiderWeight = myView.findViewById(R.id.editTextSettingsRiderWeight);
 
-        editTextSettingsYourWeight.addTextChangedListener(new TextWatcher() {
+        editTextSettingsRiderWeight.addTextChangedListener(new TextWatcher() {
 
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -99,8 +97,8 @@ public class SettingsFragment extends Fragment implements SettingsContract.View 
 
             @Override
             public void afterTextChanged(Editable editable) {
-                String weight = editTextSettingsYourWeight.getText().toString();
-                mPresenter.saveYourWeight(weight);
+                String weight = editTextSettingsRiderWeight.getText().toString();
+                mPresenter.saveRiderWeight(Integer.parseInt(weight));
             }
         });
 
@@ -120,7 +118,7 @@ public class SettingsFragment extends Fragment implements SettingsContract.View 
             @Override
             public void afterTextChanged(Editable editable) {
                 String weight = editTextSettingsBikeWeight.getText().toString();
-                mPresenter.saveBikeWeight(weight);
+                mPresenter.saveBikeWeight(Integer.parseInt(weight));
             }
         });
 
@@ -130,8 +128,7 @@ public class SettingsFragment extends Fragment implements SettingsContract.View 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                String bikeTireSize = adapterView.getItemAtPosition(i).toString();
-                mPresenter.setBikeTireSize(bikeTireSize);
+                mPresenter.setBikeTireSize(i);
             }
 
             @Override
@@ -139,6 +136,10 @@ public class SettingsFragment extends Fragment implements SettingsContract.View 
 
             }
         });
+
+        SharedPreferences prefs = this.getActivity().getSharedPreferences("com.doozy.bikepowermeter", Context.MODE_PRIVATE);
+
+        new SettingsPresenter(this, prefs);
 
         return myView;
     }
@@ -182,8 +183,8 @@ public class SettingsFragment extends Fragment implements SettingsContract.View 
      * @param weight Weight of the person
      */
     @Override
-    public void setYourWeight(String weight) {
-        editTextSettingsYourWeight.setText(weight);
+    public void setRiderWeight(int weight) {
+        editTextSettingsRiderWeight.setText(String.format(Locale.ENGLISH,"%d", weight));
     }
 
     /**
@@ -192,8 +193,8 @@ public class SettingsFragment extends Fragment implements SettingsContract.View 
      * @param weight Weight of the bike
      */
     @Override
-    public void setBikeWeight(String weight) {
-        editTextSettingsBikeWeight.setText(weight);
+    public void setBikeWeight(int weight) {
+        editTextSettingsBikeWeight.setText(String.format(Locale.ENGLISH,"%d", weight));
     }
 
     /**
@@ -219,8 +220,8 @@ public class SettingsFragment extends Fragment implements SettingsContract.View 
      * @return Boolean result of the test
      */
     @Override
-    public boolean isUnitMetric(String unit) {
-        return unit.equals(getResources().getString(R.string.unit_metric));
+    public boolean isUnitMetric(int unit) {
+        return unit == 0;
     }
 
     /**
@@ -230,7 +231,7 @@ public class SettingsFragment extends Fragment implements SettingsContract.View 
      * @return Boolean result of the test
      */
     @Override
-    public boolean isUnitImperial(String unit) {
+    public boolean isUnitImperial(int unit) {
         return !isUnitMetric(unit);
     }
 
@@ -241,8 +242,8 @@ public class SettingsFragment extends Fragment implements SettingsContract.View 
      * @return Boolean result of the test
      */
     @Override
-    public boolean isBikeTireMountain(String bikeTireType) {
-        return bikeTireType.equals(getResources().getString(R.string.mountain_bike_tires));
+    public boolean isBikeTireMountain(int bikeTireType) {
+        return bikeTireType == 0;
     }
 
     /**
@@ -252,7 +253,7 @@ public class SettingsFragment extends Fragment implements SettingsContract.View 
      * @return Boolean result of the test
      */
     @Override
-    public boolean isBikeTireRoad(String bikeTireType) {
+    public boolean isBikeTireRoad(int bikeTireType) {
         return !isBikeTireMountain(bikeTireType);
     }
 }

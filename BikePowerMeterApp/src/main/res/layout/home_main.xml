@@ -34,8 +34,8 @@
         android:id="@+id/textViewHomeSpeedText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/radioGroupPositon"
-        android:layout_below="@+id/radioGroupPositon"
+        android:layout_alignStart="@+id/radioGroupPosition"
+        android:layout_below="@+id/radioGroupPosition"
         android:text="@string/speed"
         android:textSize="30sp" />
 
@@ -55,7 +55,7 @@
         android:layout_alignStart="@+id/textViewHomeSpeedText"
         android:layout_below="@+id/textViewHomeSpeedText"
         android:layout_marginTop="12dp"
-        android:text="@string/_0_kmh"
+        android:text="@string/n_a"
         android:textSize="24sp" />
 
     <Button
@@ -115,7 +115,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/arcProgressHomePower"
         android:layout_centerHorizontal="true"
-        android:text="@string/positon"
+        android:text="@string/position"
         android:textSize="24sp" />
 
     <RadioGroup
@@ -124,17 +124,18 @@
         android:layout_below="@+id/textView3"
         android:layout_centerHorizontal="true"
         android:orientation="horizontal"
-        android:id="@+id/radioGroupPositon">
+        android:id="@+id/radioGroupPosition">
 
         <RadioButton
             android:id="@+id/rbRelaxed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:checked="true"
             android:text="@string/relaxed" />
 
         <RadioButton
-            android:id="@+id/rbAgressive"
+            android:id="@+id/rbAggressive"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"

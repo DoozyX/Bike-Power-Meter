@@ -15,23 +15,23 @@ public interface HomeContract {
     }
 
     interface View extends BaseView<Presenter> {
-        public void hideStartButton();
+        void hideStartButton();
 
-        public void showStartButton();
+        void showStartButton();
 
-        public void showPauseStopLayout();
+        void showPauseStopLayout();
 
-        public void hidePauseStopLayout();
+        void hidePauseStopLayout();
 
-        public void setArcPower(int power);
+        void setArcPower(int power);
 
-        public void setArcSpeed(int speed);
+        void setSpeed(double speed);
 
-        public void setPauseButton();
+        void setPauseButton();
 
-        public void setContinueButton();
+        void setContinueButton();
 
-        public Chronometer getChmDuration();
+        Chronometer getChmDuration();
 
     }
 

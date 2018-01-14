@@ -15,7 +15,7 @@
         android:layout_marginEnd="296dp"
         android:layout_marginStart="48dp"
         android:layout_marginTop="16dp"
-        android:text="@string/mesure_unit"
+        android:text="@string/measure_unit"
         android:textSize="22sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.666"
@@ -53,7 +53,7 @@
     </RadioGroup>
 
     <TextView
-        android:id="@+id/textViewSettingsYourWeight"
+        android:id="@+id/textViewSettingsRiderWeight"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="48dp"
@@ -64,18 +64,18 @@
         app:layout_constraintTop_toBottomOf="@+id/textViewSettingsUnit" />
 
     <EditText
-        android:id="@+id/editTextSettingsYourWeight"
+        android:id="@+id/editTextSettingsRiderWeight"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="24dp"
         android:ems="10"
         android:inputType="number"
-        android:labelFor="@id/editTextSettingsYourWeight"
+        android:labelFor="@id/editTextSettingsRiderWeight"
         android:textAlignment="center"
-        app:layout_constraintBaseline_toBaselineOf="@+id/textViewSettingsYourWeight"
+        app:layout_constraintBaseline_toBaselineOf="@+id/textViewSettingsRiderWeight"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textViewSettingsYourWeight" />
+        app:layout_constraintStart_toEndOf="@+id/textViewSettingsRiderWeight" />
 
     <TextView
         android:id="@+id/textViewSettingsBikeWeight"
@@ -88,7 +88,7 @@
         android:textSize="22sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewSettingsYourWeight"
+        app:layout_constraintTop_toBottomOf="@+id/textViewSettingsRiderWeight"
         app:layout_constraintVertical_bias="0.0" />
 
     <EditText
@@ -101,7 +101,7 @@
         android:labelFor="@id/editTextSettingsBikeWeight"
         android:textAlignment="center"
         app:layout_constraintBaseline_toBaselineOf="@+id/textViewSettingsBikeWeight"
-        app:layout_constraintEnd_toEndOf="@+id/editTextSettingsYourWeight"
+        app:layout_constraintEnd_toEndOf="@+id/editTextSettingsRiderWeight"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/textViewSettingsBikeWeight" />
 

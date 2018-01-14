@@ -1,16 +1,10 @@
 package com.doozy.bikepowermeter.home;
 
-import android.Manifest;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,36 +16,39 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.doozy.bikepowermeter.R;
-import com.doozy.bikepowermeter.data.AppDatabase;
+import com.doozy.bikepowermeter.services.impl.OpenWeatherMapWeatherServiceImpl;
 import com.github.lzyzsd.circleprogress.ArcProgress;
+
+import java.util.Locale;
 
 /**
  * TODO: Description
  */
 
 public class HomeFragment extends Fragment implements HomeContract.View{
-    View myView;
+    private View myView;
 
-    static final int REQUEST_LOCATION = 1;
     private HomeContract.Presenter mPresenter;
 
-    ArcProgress arcProgressHomePower;
+    private ArcProgress arcProgressHomePower;
 
-    Button btnStart;
-    Button btnPauseContinue;
-    Button btnStop;
-    LinearLayout layoutPauseStop;
+    private Button btnStart;
+    private Button btnPauseContinue;
+    private Button btnStop;
+    private LinearLayout layoutPauseStop;
 
-    RadioGroup rgPosition;
-    RadioButton rbRelaxed;
-    RadioButton rbAggressive;
-    RadioButton rbAerodynamic;
+    private RadioGroup rgPosition;
+    private RadioButton rbRelaxed;
+    private RadioButton rbAggressive;
+    private RadioButton rbAerodynamic;
 
-    TextView tvSpeed;
-    Chronometer chmDuration;
+    private TextView tvSpeed;
+    private Chronometer chmDuration;
 
-    public static HomeFragment newInstance() {
-        return new HomeFragment();
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        getActivity().setTitle(R.string.nav_home);
     }
 
 
@@ -59,11 +56,10 @@ public class HomeFragment extends Fragment implements HomeContract.View{
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         myView = inflater.inflate(R.layout.home_main, container, false);
-        getActivity().setTitle(R.string.nav_home);
 
         arcProgressHomePower = myView.findViewById(R.id.arcProgressHomePower);
 
-        rgPosition = myView.findViewById(R.id.radioGroupPositon);
+        rgPosition = myView.findViewById(R.id.radioGroupPosition);
         rgPosition.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -71,13 +67,13 @@ public class HomeFragment extends Fragment implements HomeContract.View{
                     mPresenter.setPosition(HomeContract.Position.RELAXED);
                 } else if (checkedId == rbAggressive.getId()) {
                     mPresenter.setPosition(HomeContract.Position.AGGRESSIVE);
-                } else {
+                } else if (checkedId == rbAerodynamic.getId()){
                     mPresenter.setPosition(HomeContract.Position.AERODYNAMIC);
                 }
             }
         });
         rbRelaxed = myView.findViewById(R.id.rbRelaxed);
-        rbAggressive = myView.findViewById(R.id.rbAgressive);
+        rbAggressive = myView.findViewById(R.id.rbAggressive);
         rbAerodynamic = myView.findViewById(R.id.rbAerodynamic);
 
         tvSpeed = myView.findViewById(R.id.textViewHomeSpeed);
@@ -108,7 +104,8 @@ public class HomeFragment extends Fragment implements HomeContract.View{
         layoutPauseStop = myView.findViewById(R.id.linearLayoutHomeBottomButtons);
 
         SharedPreferences prefs = this.getActivity().getSharedPreferences("com.doozy.bikepowermeter", Context.MODE_PRIVATE);
-        new HomePresenter(this, prefs, AppDatabase.getAppDatabase(getActivity().getApplicationContext()));
+
+        new HomePresenter(this, new OpenWeatherMapWeatherServiceImpl(getActivity()), prefs, this.getContext());
 
         return myView;
     }
@@ -134,14 +131,14 @@ public class HomeFragment extends Fragment implements HomeContract.View{
     }
 
     @Override
-    public void setArcSpeed(int speed) { tvSpeed.setText(speed); }
+    public void setSpeed(double speed) { tvSpeed.setText(String.format(Locale.ENGLISH, "%.2f%s", speed, getString(R.string.km_h))); }
 
     public void setPauseButton() {
-        btnPauseContinue.setText(getResources().getString(R.string.continue_text));
+        btnPauseContinue.setText(getResources().getString(R.string.pause));
     }
 
     public void setContinueButton() {
-        btnPauseContinue.setText(getResources().getString(R.string.pause));
+        btnPauseContinue.setText(getResources().getString(R.string.continue_text));
     }
 
     public Chronometer getChmDuration() {
