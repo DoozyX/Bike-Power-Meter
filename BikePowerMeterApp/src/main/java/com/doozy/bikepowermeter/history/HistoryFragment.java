@@ -77,7 +77,7 @@ public class HistoryFragment extends Fragment implements HistoryContract.View  {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getActivity().setTitle(R.string.nav_history);
-        //  lv = (ExpandableListView) view.findViewById(R.id.expListView);
+        // / lv = (ExpandableListView) view.findViewById(R.id.expListView);
         //lv.setAdapter(new ExpandableListAdapter(groups, children));
         // lv.setGroupIndicator(null);
         listView = (ExpandableListView) view.findViewById(R.id.lvExp);

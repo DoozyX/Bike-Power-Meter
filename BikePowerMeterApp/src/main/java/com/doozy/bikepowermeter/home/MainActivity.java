@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
                     // Handle the camera action
                     fragmentManager.beginTransaction().replace(R.id.content_main, new HomeFragment()).commit();
                 } else if (id == R.id.nav_history) {
-                    fragmentManager.beginTransaction().replace(R.id.content_main, new HistoryFragment()).commit();
+                    //fragmentManager.beginTransaction().replace(R.id.content_main, new HistoryFragment()).commit();
                 } else if (id == R.id.nav_settings) {
                     fragmentManager.beginTransaction().replace(R.id.content_main, new SettingsFragment()).commit();
                 } else if (id == R.id.nav_about) {
