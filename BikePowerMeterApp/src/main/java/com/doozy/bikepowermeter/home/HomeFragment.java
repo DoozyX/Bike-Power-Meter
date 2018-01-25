@@ -105,7 +105,7 @@ public class HomeFragment extends Fragment implements HomeContract.View{
 
         SharedPreferences prefs = this.getActivity().getSharedPreferences("com.doozy.bikepowermeter", Context.MODE_PRIVATE);
 
-        new HomePresenter(this, new OpenWeatherMapWeatherServiceImpl(getActivity()), prefs, this.getContext());
+        new HomePresenter(this, new OpenWeatherMapWeatherServiceImpl(getActivity()), prefs, myView.getContext());
 
         return myView;
     }

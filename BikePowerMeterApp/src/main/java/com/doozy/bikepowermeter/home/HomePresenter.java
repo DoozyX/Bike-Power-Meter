@@ -290,15 +290,17 @@ public class HomePresenter implements HomeContract.Presenter {
             @Override
             public void onLocationResult(LocationResult locationResult) {
                 super.onLocationResult(locationResult);
-                float distance = mCurrentLocation.distanceTo(locationResult.getLastLocation());
-                double rise = locationResult.getLastLocation().getAltitude() - mCurrentLocation.getAltitude();
-                double run = (distance * distance) - (rise * rise);
-                mGradeOfHill = rise / run * 100;
-                mCurrentLocation = locationResult.getLastLocation();
-                mSpeed = mCurrentLocation.getSpeed();
-                calculatePower();
-                mRide.addMeasurement(new Measurement(mSpeed, mPower));
-                updateUI();
+                if (mRequestingLocationUpdates) {
+                    float distance = mCurrentLocation.distanceTo(locationResult.getLastLocation());
+                    double rise = locationResult.getLastLocation().getAltitude() - mCurrentLocation.getAltitude();
+                    double run = (distance * distance) - (rise * rise);
+                    mGradeOfHill = rise / run * 100;
+                    mCurrentLocation = locationResult.getLastLocation();
+                    mSpeed = mCurrentLocation.getSpeed();
+                    calculatePower();
+                    mRide.addMeasurement(new Measurement(mSpeed, mPower));
+                    updateUI();
+                }
                 //Toast.makeText(mContext, mCurrentLocation + " ", Toast.LENGTH_SHORT).show();
             }
         };
