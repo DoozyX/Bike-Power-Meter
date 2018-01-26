@@ -117,47 +117,11 @@ public class HistoryFragment extends Fragment implements HistoryContract.View  {
         mListDataChild = new HashMap<>();
 
         List<Ride> allRides = AppDatabase.getAppDatabase(myView.getContext()).rideDao().getRides();
-        Log.d("test", allRides.toString());
         for (Ride ride : allRides) {
-            Log.d("test", ride.toString());
-            mListDataHeader.add(ride.getStartDate().toString());
+            mListDataHeader.add(ride.getStartDate());
             List<String> lista = new ArrayList<>();
             lista.add(ride.toString());
-            mListDataChild.put(ride.getStartDate().toString(),lista);
+            mListDataChild.put(ride.getStartDate(),lista);
         }
-        /*
-        // Adding child data
-        mListDataHeader.add("Top 250");
-        mListDataHeader.add("Now Showing");
-        mListDataHeader.add("Coming Soon..");
-
-        // Adding child data
-        List<String> top250 = new ArrayList<>();
-        top250.add("The Shawshank Redemption");
-        top250.add("The Godfather");
-        top250.add("The Godfather: Part II");
-        top250.add("Pulp Fiction");
-        top250.add("The Good, the Bad and the Ugly");
-        top250.add("The Dark Knight");
-        top250.add("12 Angry Men");
-
-        List<String> nowShowing = new ArrayList<>();
-        nowShowing.add("The Conjuring");
-        nowShowing.add("Despicable Me 2");
-        nowShowing.add("Turbo");
-        nowShowing.add("Grown Ups 2");
-        nowShowing.add("Red 2");
-        nowShowing.add("The Wolverine");
-
-        List<String> comingSoon = new ArrayList<>();
-        comingSoon.add("2 Guns");
-        comingSoon.add("The Smurfs 2");
-        comingSoon.add("The Spectacular Now");
-        comingSoon.add("The Canyons");
-        comingSoon.add("Europa Report");
-
-        mListDataChild.put(mListDataHeader.get(0), top250); // Header, Child data
-        mListDataChild.put(mListDataHeader.get(1), nowShowing);
-        mListDataChild.put(mListDataHeader.get(2), comingSoon);*/
     }
 }

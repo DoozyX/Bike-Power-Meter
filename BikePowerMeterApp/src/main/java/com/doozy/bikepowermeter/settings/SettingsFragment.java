@@ -97,8 +97,12 @@ public class SettingsFragment extends Fragment implements SettingsContract.View 
 
             @Override
             public void afterTextChanged(Editable editable) {
-                String weight = editTextSettingsRiderWeight.getText().toString();
-                mPresenter.saveRiderWeight(Integer.parseInt(weight));
+                try {
+                    String weight = editTextSettingsRiderWeight.getText().toString();
+                    mPresenter.saveRiderWeight(Integer.parseInt(weight));
+                } catch (Exception e) {
+                    mPresenter.saveRiderWeight(0);
+                }
             }
         });
 
@@ -118,7 +122,11 @@ public class SettingsFragment extends Fragment implements SettingsContract.View 
             @Override
             public void afterTextChanged(Editable editable) {
                 String weight = editTextSettingsBikeWeight.getText().toString();
-                mPresenter.saveBikeWeight(Integer.parseInt(weight));
+                try {
+                    mPresenter.saveBikeWeight(Integer.parseInt(weight));
+                } catch (Exception e) {
+                    mPresenter.saveBikeWeight(0);
+                }
             }
         });
 
