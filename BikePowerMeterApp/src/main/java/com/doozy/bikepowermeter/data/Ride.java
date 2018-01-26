@@ -13,15 +13,15 @@ import java.util.List;
  * Immutable model class for a Bike Rides.
  */
 
-@Entity
+@Entity(tableName = "rides")
 public class Ride {
     @PrimaryKey(autoGenerate = true)
     private long id;
 
-    @Embedded
-    private Date mStartDate;
-    @Embedded
-    private Date mEndDate;
+
+    private String mStartDate;
+
+    private String mEndDate;
     private int mDuration;
 
     private int mAveragePower;
@@ -37,19 +37,19 @@ public class Ride {
         mMeasurements = new ArrayList<>();
     }
 
-    public Date getStartDate() {
+    public String getStartDate() {
         return mStartDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(String startDate) {
         this.mStartDate = startDate;
     }
 
-    public Date getEndDate() {
+    public String getEndDate() {
         return mEndDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(String endDate) {
         this.mEndDate = endDate;
     }
 
@@ -106,5 +106,10 @@ public class Ride {
         }
         mAveragePower = sumPower / n;
         mAverageSpeed = sumSpeed / n;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Avg. Power  Avg. Speed   Duration \n\t %10s %15s %13s", mAveragePower ,mAverageSpeed, mDuration);
     }
 }

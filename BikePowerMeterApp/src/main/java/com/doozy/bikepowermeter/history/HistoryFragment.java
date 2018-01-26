@@ -3,6 +3,7 @@ package com.doozy.bikepowermeter.history;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +13,10 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Logger;
+
 import com.doozy.bikepowermeter.R;
+import com.doozy.bikepowermeter.data.AppDatabase;
 import com.doozy.bikepowermeter.data.Ride;
 
 /**
@@ -112,6 +116,16 @@ public class HistoryFragment extends Fragment implements HistoryContract.View  {
         mListDataHeader = new ArrayList<>();
         mListDataChild = new HashMap<>();
 
+        List<Ride> allRides = AppDatabase.getAppDatabase(myView.getContext()).rideDao().getRides();
+        Log.d("test", allRides.toString());
+        for (Ride ride : allRides) {
+            Log.d("test", ride.toString());
+            mListDataHeader.add(ride.getStartDate().toString());
+            List<String> lista = new ArrayList<>();
+            lista.add(ride.toString());
+            mListDataChild.put(ride.getStartDate().toString(),lista);
+        }
+        /*
         // Adding child data
         mListDataHeader.add("Top 250");
         mListDataHeader.add("Now Showing");
@@ -144,6 +158,6 @@ public class HistoryFragment extends Fragment implements HistoryContract.View  {
 
         mListDataChild.put(mListDataHeader.get(0), top250); // Header, Child data
         mListDataChild.put(mListDataHeader.get(1), nowShowing);
-        mListDataChild.put(mListDataHeader.get(2), comingSoon);
+        mListDataChild.put(mListDataHeader.get(2), comingSoon);*/
     }
 }

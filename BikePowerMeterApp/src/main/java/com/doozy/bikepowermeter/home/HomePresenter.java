@@ -405,7 +405,7 @@ public class HomePresenter implements HomeContract.Presenter {
         mChronometer.start();
 
         mRide = new Ride();
-        mRide.setStartDate(Calendar.getInstance().getTime());
+        mRide.setStartDate(Calendar.getInstance().getTime().toString());
         mRide.setWeather(mWeather);
         mWeather = mWeatherService.getWeather();
         if (mWeather != null) {
@@ -438,8 +438,9 @@ public class HomePresenter implements HomeContract.Presenter {
         mHomeView.hidePauseStopLayout();
         mHomeView.showStartButton();
         mRide.calculateAndSetAverages();
-        mRide.setEndDate(Calendar.getInstance().getTime());
+        mRide.setEndDate(Calendar.getInstance().getTime().toString());
         mRide.setWeather(mWeather);
+        mRide.setDuration((int)(SystemClock.elapsedRealtime() - mChronometer.getBase())/1000);
 
         mDatabase.rideDao().insertRide(mRide);
 
