@@ -100,6 +100,12 @@ public class Ride {
 
     public void calculateAndSetAverages() {
         int sumPower = 0, sumSpeed = 0, n = mMeasurements.size();
+        if (n == 0) {
+            mAveragePower = 0;
+            mAverageSpeed = 0;
+            return;
+        }
+
         for (Measurement m: mMeasurements) {
             sumPower += m.getPower();
             sumSpeed += m.getSpeed();

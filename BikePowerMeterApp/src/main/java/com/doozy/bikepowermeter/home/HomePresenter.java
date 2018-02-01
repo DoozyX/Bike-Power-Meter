@@ -51,15 +51,13 @@ public class HomePresenter implements HomeContract.Presenter {
     /**
      * The desired interval for location updates. Inexact. Updates may be more or less frequent.
      */
-    //private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 1000;
-    private static final long INTERVAL = 1000 * 2;
-    private static final long FASTEST_INTERVAL = 1000 * 1;
+    private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 2000;
     /**
      * The fastest rate for active location updates. Exact. Updates will never be more frequent
      * than this value.
      */
-    //private static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS =
-     //       UPDATE_INTERVAL_IN_MILLISECONDS / 2;
+    private static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS =
+            UPDATE_INTERVAL_IN_MILLISECONDS / 2;
 
     /**
      * Provides access to the Fused Location Provider API.
@@ -75,7 +73,7 @@ public class HomePresenter implements HomeContract.Presenter {
      * Stores parameters for requests to the FusedLocationProviderApi.
      */
 
-    LocationRequest mLocationRequest;
+    private LocationRequest mLocationRequest;
     GoogleApiClient mGoogleApiClient;
 
     /**
@@ -103,9 +101,7 @@ public class HomePresenter implements HomeContract.Presenter {
     /**
      * Represents a geographical location.
      */
-    private Location mCurrentLocation,lStart, lEnd;
-
-    double calculatedSpeed = 0;
+    private Location mCurrentLocation;
 
     private WeatherService mWeatherService;
     private HomeContract.View mHomeView;
@@ -279,11 +275,11 @@ public class HomePresenter implements HomeContract.Presenter {
         // inexact. You may not receive updates at all if no location sources are available, or
         // you may receive them slower than requested. You may also receive updates faster than
         // requested if other applications are requesting location at a faster interval.
-        mLocationRequest.setInterval(INTERVAL);
+        mLocationRequest.setInterval(UPDATE_INTERVAL_IN_MILLISECONDS);
 
         // Sets the fastest rate for active location updates. This interval is exact, and your
         // application will never receive updates faster than this value.
-        mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
+        mLocationRequest.setFastestInterval(FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS);
 
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
@@ -298,18 +294,22 @@ public class HomePresenter implements HomeContract.Presenter {
                 super.onLocationResult(locationResult);
                 if (mRequestingLocationUpdates) {
                     mCurrentLocation = locationResult.getLastLocation();
-                    if (lStart == null) {
-                        lStart = mCurrentLocation;
-                        lEnd = mCurrentLocation;
-                    } else
-                        lEnd = mCurrentLocation;
+
+                    if (mCurrentLocation != null) {
+                        if (locationResult.getLastLocation().getTime() - mCurrentLocation.getTime() != 0) {
+                            mSpeed = (mCurrentLocation.distanceTo(locationResult.getLastLocation()) / ((locationResult.getLastLocation().getTime() - mCurrentLocation.getTime()) / 1000)) * 3.6;
+                        } else {
+                            mSpeed = 0;
+                        }
+                    } else {
+                        mSpeed = 0;
+                    }
 
                     float distance = mCurrentLocation.distanceTo(locationResult.getLastLocation());
                     double rise = locationResult.getLastLocation().getAltitude() - mCurrentLocation.getAltitude();
                     double run = (distance * distance) - (rise * rise);
                     mGradeOfHill = rise / run * 100;
                     mCurrentLocation = locationResult.getLastLocation();
-                    mSpeed = mCurrentLocation.getSpeed();
                     calculatePower();
                     mRide.addMeasurement(new Measurement(mSpeed, mPower));
                     updateUI();
@@ -321,8 +321,7 @@ public class HomePresenter implements HomeContract.Presenter {
 
     private void updateUI() {
         mHomeView.setArcPower((int) mPower);
-        calculatedSpeed = lStart.distanceTo(lEnd)/5;
-        mHomeView.setSpeed(calculatedSpeed);
+        mHomeView.setSpeed(mSpeed);
     }
 
     /**
@@ -454,7 +453,7 @@ public class HomePresenter implements HomeContract.Presenter {
         mRide.calculateAndSetAverages();
         mRide.setEndDate(Calendar.getInstance().getTime().toString());
         mRide.setWeather(mWeather);
-        mRide.setDuration((int)(SystemClock.elapsedRealtime() - mChronometer.getBase())/1000);
+        mRide.setDuration((int) (SystemClock.elapsedRealtime() - mChronometer.getBase()) / 1000);
 
         mDatabase.rideDao().insertRide(mRide);
 

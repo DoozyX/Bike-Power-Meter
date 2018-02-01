@@ -6,7 +6,9 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import com.doozy.bikepowermeter.R;
 import com.doozy.bikepowermeter.home.MainActivity;
@@ -31,15 +33,18 @@ public class FirstRunActivity extends Activity {
         } else {
             editor.putInt("unit", 1);
         }
+        try {
+            EditText weight = findViewById(R.id.editTextFirstRunRiderWeight);
+            editor.putInt("riderWeight", Integer.parseInt(weight.getText().toString()));
 
-        EditText weight = findViewById(R.id.editTextFirstRunRiderWeight);
-        editor.putInt("riderWeight", Integer.parseInt(weight.getText().toString()));
+            weight = findViewById(R.id.editTextFirstRunBikeWeight);
+            editor.putInt("bikeWeight", Integer.parseInt(weight.getText().toString()));
 
-        weight = findViewById(R.id.editTextFirstRunBikeWeight);
-        editor.putInt("bikeWeight", Integer.parseInt(weight.getText().toString()));
-
-        editor.putInt("bikeTires", 0);
-
+            editor.putInt("bikeTires", 0);
+        } catch (Exception e) {
+            Toast.makeText(this, "Please fill all the fields.", Toast.LENGTH_SHORT).show();
+            return;
+        }
         editor.apply();
 
         Intent intent = new Intent(this, MainActivity.class);
