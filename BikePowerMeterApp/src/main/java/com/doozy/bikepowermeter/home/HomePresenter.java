@@ -18,6 +18,7 @@ import com.doozy.bikepowermeter.data.Weather;
 import com.doozy.bikepowermeter.home.HomeContract.Position;
 import com.doozy.bikepowermeter.services.WeatherService;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -50,14 +51,15 @@ public class HomePresenter implements HomeContract.Presenter {
     /**
      * The desired interval for location updates. Inexact. Updates may be more or less frequent.
      */
-    private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 1000;
-
+    //private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 1000;
+    private static final long INTERVAL = 1000 * 2;
+    private static final long FASTEST_INTERVAL = 1000 * 1;
     /**
      * The fastest rate for active location updates. Exact. Updates will never be more frequent
      * than this value.
      */
-    private static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS =
-            UPDATE_INTERVAL_IN_MILLISECONDS / 2;
+    //private static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS =
+     //       UPDATE_INTERVAL_IN_MILLISECONDS / 2;
 
     /**
      * Provides access to the Fused Location Provider API.
@@ -72,7 +74,9 @@ public class HomePresenter implements HomeContract.Presenter {
     /**
      * Stores parameters for requests to the FusedLocationProviderApi.
      */
-    private LocationRequest mLocationRequest;
+
+    LocationRequest mLocationRequest;
+    GoogleApiClient mGoogleApiClient;
 
     /**
      * Stores the types of location services the client is interested in using. Used for checking
@@ -99,7 +103,9 @@ public class HomePresenter implements HomeContract.Presenter {
     /**
      * Represents a geographical location.
      */
-    private Location mCurrentLocation;
+    private Location mCurrentLocation,lStart, lEnd;
+
+    double calculatedSpeed = 0;
 
     private WeatherService mWeatherService;
     private HomeContract.View mHomeView;
@@ -273,11 +279,11 @@ public class HomePresenter implements HomeContract.Presenter {
         // inexact. You may not receive updates at all if no location sources are available, or
         // you may receive them slower than requested. You may also receive updates faster than
         // requested if other applications are requesting location at a faster interval.
-        mLocationRequest.setInterval(UPDATE_INTERVAL_IN_MILLISECONDS);
+        mLocationRequest.setInterval(INTERVAL);
 
         // Sets the fastest rate for active location updates. This interval is exact, and your
         // application will never receive updates faster than this value.
-        mLocationRequest.setFastestInterval(FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS);
+        mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
 
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
@@ -291,6 +297,13 @@ public class HomePresenter implements HomeContract.Presenter {
             public void onLocationResult(LocationResult locationResult) {
                 super.onLocationResult(locationResult);
                 if (mRequestingLocationUpdates) {
+                    mCurrentLocation = locationResult.getLastLocation();
+                    if (lStart == null) {
+                        lStart = mCurrentLocation;
+                        lEnd = mCurrentLocation;
+                    } else
+                        lEnd = mCurrentLocation;
+
                     float distance = mCurrentLocation.distanceTo(locationResult.getLastLocation());
                     double rise = locationResult.getLastLocation().getAltitude() - mCurrentLocation.getAltitude();
                     double run = (distance * distance) - (rise * rise);
@@ -308,7 +321,8 @@ public class HomePresenter implements HomeContract.Presenter {
 
     private void updateUI() {
         mHomeView.setArcPower((int) mPower);
-        mHomeView.setSpeed(mSpeed);
+        calculatedSpeed = lStart.distanceTo(lEnd)/5;
+        mHomeView.setSpeed(calculatedSpeed);
     }
 
     /**
